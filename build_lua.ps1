@@ -57,7 +57,6 @@ try {
 }
 
 if ($test_hash -ne $hash[$version].ToLower()) {
-  #Write-Host "[ERROR] $source validation failed, exiting" -foregroundcolor red
   Write-Status "$source validation failed, exiting" '[ERROR]' 'Red'
   break
 }
@@ -111,4 +110,4 @@ Pop-Location
 # hoist binary archive and cleanup
 Write-Status "cleaning up"
 mv "$install_dir/$bin_archive" "$PWD"
-rm -recurse -force "${source_dir}"
+rm "${source_dir}" -recurse -force
