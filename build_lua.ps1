@@ -109,5 +109,5 @@ Pop-Location
 
 # hoist binary archive and cleanup
 Write-Status "cleaning up"
-mv "$install_dir/$bin_archive" "$PWD"
+mv "$install_dir/$bin_archive" "$PWD" -force
 rm "${source_dir}" -recurse -force
