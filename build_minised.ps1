@@ -30,7 +30,7 @@ $source = "${libname}-${version}.tar.gz"
 $source_dir = "${libname}-${version}"
 $repo_root = "http://dl.exactcode.de/oss/${libname}/"
 $archive = "${repo_root}${source}"
-$hash_uri = "https://raw.github.com/jonforums/poshlab/master/hashery/${libname}.sha1"
+$hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
 function Write-Status($msg, $leader='--->', $color='Yellow') {
   Write-Host "$leader $msg" -foregroundcolor $color
