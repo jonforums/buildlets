@@ -36,15 +36,14 @@ function Write-Status($msg, $leader='--->', $color='Yellow') {
   Write-Host "$leader $msg" -foregroundcolor $color
 }
 
-# download and verify
-# TODO implement progress bar when extracted to util helper module
+# download source archive
 if(-not (Test-Path $source)) {
   Import-Module BitsTransfer
   Write-Status "downloading $archive"
   Start-BitsTransfer $archive "$PWD\$source"
 }
 
-# download hash data and validate downloaded source archive
+# download hash data and validate source archive
 Write-Status "validating $source"
 $client = New-Object System.Net.WebClient
 $hash = ConvertFrom-StringData $client.DownloadString($hash_uri)
@@ -102,5 +101,5 @@ Pop-Location
 
 # hoist binary archive and cleanup
 Write-Status "cleaning up"
-mv "$install_dir\$bin_archive" "$PWD"
+mv "$install_dir/$bin_archive" "$PWD" -force
 rm "${source_dir}" -recurse -force
