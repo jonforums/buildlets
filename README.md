@@ -25,7 +25,6 @@ minimalism and modular reusability.
 ## TODO
 
 * `get_build_deps.ps1` build dependency downloader
-* extract commonality into a downloadable helper `.ps1`
 
 ## License
 
