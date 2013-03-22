@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-21 22:18:46 -0600
+# Revision: 2013-03-21 22:49:38 -0600
 
 function Write-Status($msg, $leader='--->', $color='Yellow') {
   Write-Host "$leader $msg" -foregroundcolor $color
@@ -22,7 +22,12 @@ function Validate-Archive() {
     $fetcher = New-Object System.Net.WebClient
     $hash = ConvertFrom-StringData $fetcher.DownloadString($hash_uri)
 
-    $hasher = New-Object System.Security.Cryptography.SHA1Cng
+    switch ($hash_uri.SubString($hash_uri.LastIndexOf('.')+1)) {
+      'md5' { $hasher = New-Object System.Security.Cryptography.MD5Cng; break }
+      'sha1' { $hasher = New-Object System.Security.Cryptography.SHA1Cng; break }
+      default { throw }
+    }
+
     $fs = New-Object System.IO.FileStream "$PWD\$source", 'Open', 'Read'
     $test_hash = [BitConverter]::ToString($hasher.ComputeHash($fs)).Replace('-','').ToLower()
   }
