@@ -7,7 +7,7 @@ Windows systems.
 In contrast with other well known port-style systems, buildlets enable one to
 quickly build binary artifacts with minimal ceremony and minimal persistent
 configuration. Typically one downloads a buildlet, runs it, and gets a binary
-archive. How you use the resulting binary is up to you.
+archive. What you do next is up to you.
 
 Buildlets are very mercenary in their focus and actions. No interdependency
 management. No complex configuration nor massive directory trees of persistent
