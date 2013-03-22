@@ -2,11 +2,10 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-21 12:22:36 -0600
+# Revision: 2013-03-22 00:29:32 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
-#   - add proper try-catch-finally error handling
 #   - add x86/x64 dynamic package naming
 
 param(
@@ -24,7 +23,6 @@ param(
   [string] $DEVKIT = 'C:/Devkit'
 )
 
-$root = split-path -parent $script:MyInvocation.MyCommand.Path
 $libname = 'libffi'
 $source = "${libname}-${version}.tar.gz"
 $source_dir = "${libname}-${version}"
@@ -32,73 +30,34 @@ $repo_root = "ftp://sourceware.org/pub/${libname}/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.md5"
 
-function Write-Status($msg, $leader='--->', $color='Yellow') {
-  Write-Host "$leader $msg" -foregroundcolor $color
-}
-
-# download and verify
-# TODO implement progress bar when extracted to util helper module
-if(-not (Test-Path $source)) {
-
+# download and source the buildlet library
+if (-not (Test-Path "$PWD\buildlet_utils.ps1")) {
+  Write-Host '---> fetching buildlet library' -foregroundcolor yellow
   try {
-    Write-Status "downloading $archive"
-    [System.Net.FtpWebRequest]$request = [System.Net.WebRequest]::Create($archive)
-    $request.Method = [System.Net.WebRequestMethods+Ftp]::DownloadFile
-    $request.UseBinary = $true
-    $request.UsePassive = $true
-
-    $response = $request.GetResponse()
-    $response_stream = $response.GetResponseStream()
-    $fs = New-Object System.IO.FileStream "$PWD/$source", 'Create', 'Write'
-
-    [byte[]] $buffer = New-Object byte[] 4096
-
-    do {
-      $count = $response_stream.Read($buffer, 0, $buffer.Length)
-      $fs.Write($buffer, 0, $count)
-    } while ($count -gt 0)  # EOS when Read returns 0 bytes
+    $fetcher = New-Object System.Net.WebClient
+    $fetcher.DownloadFile('https://raw.github.com/jonforums/buildlets/master/buildlet_utils.ps1',
+                          "$PWD\buildlet_utils.ps1")
   }
   catch {
-    throw "[ERROR] Oops trying to download"
-  }
-  finally {
-    if ($fs) { $fs.Flush(); $fs.Close() }
-    if ($response_stream) { $response_stream.Close() }
-    if ($response) { $response.Close() }
+    throw '[ERROR] unable to fetch required buildlet library'
   }
 }
+. "$PWD\buildlet_utils.ps1"
+
+# download source archive
+Fetch-Archive
 
 # download hash data and validate source archive
-Write-Status "validating $source"
-$client = New-Object System.Net.WebClient
-$hash = ConvertFrom-StringData $client.DownloadString($hash_uri)
-
-try {
-  $hasher = New-Object System.Security.Cryptography.MD5Cng
-  $fs = New-Object System.IO.FileStream "$PWD\$source", 'Open', 'Read'
-  $test_hash = [BitConverter]::ToString($hasher.ComputeHash($fs)).Replace('-','').ToLower()
-} finally {
-  $fs.Close()
-}
-
-if ($test_hash -ne $hash[$version].ToLower()) {
-  Write-Status "$source validation failed, exiting" '[ERROR]' 'Red'
-  break
-}
-
+Validate-Archive
 
 # extract
-Write-Status "extracting $source"
-$tar_file = "$($source.Substring(0, $source.LastIndexOf('-')))*.tar"
-(& "$7ZA" "x" $source) -and (& "$7ZA" "x" $tar_file) -and (rm $tar_file) | Out-Null
-
+Extract-Archive
 
 # patch, configure, build, archive
 Push-Location "${source_dir}"
 
   # activate toolchain
-  Write-Status "activating toolchain"
-  . "$DEVKIT/devkitvars.ps1" | Out-Null
+  Activate-Toolchain
 
   # configure
   Write-Status "configuring ${source_dir}"
@@ -119,15 +78,9 @@ Push-Location "${source_dir}"
   Pop-Location
 
   # archive
-  Push-Location "$install_dir"
-    Write-Status "creating binary archive for ${source_dir}"
-    $bin_archive = "${source_dir}-x86-windows-bin.7z"
-    & "$7ZA" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
-  Pop-Location
+  Archive-Build
 
 Pop-Location
 
 # hoist binary archive and cleanup
-Write-Status "cleaning up"
-mv "$install_dir/$bin_archive" "$PWD" -force
-rm "${source_dir}" -recurse -force
+Clean-Build
