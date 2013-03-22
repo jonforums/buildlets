@@ -27,6 +27,7 @@ minimalism and modular reusability.
 
 * `get_build_deps.ps1` build dependency downloader
 * download source to `downloads` and place binary archives in `pkg`
+* use build customizations from `buildlets.conf` if present
 
 ## License
 
