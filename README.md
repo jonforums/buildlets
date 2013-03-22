@@ -16,6 +16,7 @@ minimalism and modular reusability.
 
 ## Dependencies
 
+* PowerShell 2.0+
 * Live internet connection
 * MinGW or mingw-w64 based toolchain with MSYS, Autotools, and Perl superpowers
 * 7za.exe command line file archiving tool
@@ -25,6 +26,7 @@ minimalism and modular reusability.
 ## TODO
 
 * `get_build_deps.ps1` build dependency downloader
+* download source to `downloads` and place binary archives in `pkg`
 
 ## License
 
