@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-22 00:19:57 -0600
+# Revision: 2013-03-22 14:13:07 -0600
 
 function Write-Status($msg, $leader='--->', $color='Yellow') {
   Write-Host "$leader $msg" -foregroundcolor $color
@@ -61,6 +61,8 @@ function Validate-Archive() {
     switch ($hash_uri.SubString($hash_uri.LastIndexOf('.')+1)) {
       'md5' { $hasher = New-Object System.Security.Cryptography.MD5Cng; break }
       'sha1' { $hasher = New-Object System.Security.Cryptography.SHA1Cng; break }
+      'sha256' { $hasher = New-Object System.Security.Cryptography.SHA256Cng; break }
+      'sha512' { $hasher = New-Object System.Security.Cryptography.SHA512Cng; break }
       default { throw }
     }
 
