@@ -32,6 +32,16 @@ usage can be as simple as the following:
 2. Download and execute `bootstrap.ps1` to fetch build tools, and optionally, an
    initial buildlet
 
+        PS foo> .\bootstrap.ps1 ls
+
+        == Available Buildlets ==
+           build_libffi
+           build_lua
+           build_minised
+           build_openssl
+           build_zlib
+           ...
+
         PS foo> .\bootstrap.ps1 build_lua
         ---> creating C:\Users\Jon\Downloads\temp\foo\tools
         ---> downloading tool: 7za.exe

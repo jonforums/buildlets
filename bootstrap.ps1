@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-22 21:44:38 -0600
+# Revision: 2013-03-23 14:15:26 -0600
 
 param (
     [parameter(Mandatory=$false,
@@ -25,6 +25,15 @@ $buildlets = @('build_libffi'
               )
 $buildlet_uri = 'https://raw.github.com/jonforums/buildlets/master/'
 
+switch -regex ($buildlet) {
+  '^(?:ls|list)$' {
+    Write-Host "`n== Available Buildlets ==" -foregroundcolor green
+    $buildlets | % { Write-Host "   $_" -foregroundcolor yellow }
+    return
+  }
+}
+
+Write-Debug '---> downloading tools'
 # download build tools
 if (-not (Test-Path "$tools_root" -type container)) {
   Write-Host "---> creating $tools_root" -foregroundcolor yellow
@@ -39,6 +48,7 @@ $tools | % {
   }
 }
 
+Write-Debug "---> downloading $buildlet"
 # download specified buildlet if given
 if (($buildlet) -and ($buildlets -contains $buildlet) -and `
     (-not (Test-Path "${buildlet}.ps1" -type leaf))) {
