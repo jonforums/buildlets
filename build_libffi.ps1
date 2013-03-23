@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-22 22:50:09 -0600
+# Revision: 2013-03-23 00:08:34 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -17,7 +17,7 @@ param(
   [string] $version,
 
   [parameter(HelpMessage='Path to DevKit root directory')]
-  [string] $DEVKIT = 'C:/Devkit'
+  [string] $devkit = $nil
 )
 
 $libname = 'libffi'

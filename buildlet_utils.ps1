@@ -2,14 +2,20 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-22 22:53:24 -0600
+# Revision: 2013-03-23 00:13:51 -0600
+
+# default toolchain location
+if (-not "$devkit") {
+  $devkit = 'C:\DevKit-4.7.2'
+}
 
 # by default, ensure internal build tools are used
 if (-not "$s7z") {
   $s7z = "$PWD\tools\7za.exe"
 }
 
-# TODO implement `.\buildlet.conf` customization capability
+# TODO implement `.\buildlet.conf` customization capability using
+# `ConvertFrom-StringData` converts `name = value` pairs into hash tables
 
 function Write-Status($msg, $leader='--->', $color='Yellow') {
   Write-Host "$leader $msg" -foregroundcolor $color
@@ -97,7 +103,7 @@ function Extract-Archive() {
 function Activate-Toolchain() {
   # TODO return if already active on $env:PATH
   Write-Status "activating toolchain"
-  . "$DEVKIT/devkitvars.ps1" | Out-Null
+  . "${devkit}\devkitvars.ps1" | Out-Null
 }
 
 function Archive-Build() {

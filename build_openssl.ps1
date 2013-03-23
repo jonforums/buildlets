@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-22 22:51:21 -0600
+# Revision: 2013-03-23 00:09:22 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -21,7 +21,7 @@ param(
   [string] $toolchain = 'mingw',
 
   [parameter(HelpMessage='Path to DevKit root directory')]
-  [string] $DEVKIT = 'C:/Devkit',
+  [string] $devkit = $nil,
 
   [parameter(HelpMessage='Path to zlib dev libraries root directory')]
   [alias('with-zlib-dir')]
