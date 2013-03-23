@@ -18,10 +18,34 @@ minimalism and modular reusability.
 
 * PowerShell 2.0+
 * Live internet connection
-* MinGW or mingw-w64 based toolchain with MSYS, Autotools, and Perl superpowers
-* 7za.exe command line file archiving tool
+* MinGW or mingw-w64 based toolchain with MSYS, Autotools, and Perl superpowersl
 
-## Usage
+## Basic Usage
+
+Assuming you have a capable mingw or mingw-w64 toolchain already installed, typical
+usage can be as simple as the following:
+
+1. Open PowerShell
+2. Download and execute `bootstrap.ps1` to fetch build tools and, optionally, an
+   initial buildlet
+
+        PS foo> .\bootstrap.ps1 build_lua
+        ---> creating C:\Users\Jon\Downloads\temp\foo\tools
+        ---> downloading tool: 7za.exe
+        ---> downloading build_lua.ps1
+
+3. Execute the buildlet
+
+        PS foo> .\build_lua.ps1 5.2.1
+        ---> fetching buildlet library
+        ---> downloading http://www.lua.org/ftp/lua-5.2.1.tar.gz
+        ---> validating lua-5.2.1.tar.gz
+        ---> extracting lua-5.2.1.tar.gz
+        ---> activating toolchain
+        ---> configuring lua-5.2.1
+        ---> building lua-5.2.1
+        ---> creating binary archive for lua-5.2.1
+        ---> cleaning up
 
 ## License
 
