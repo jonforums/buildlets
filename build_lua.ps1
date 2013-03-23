@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-21 22:28:59 -0600
+# Revision: 2013-03-22 22:54:15 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -15,9 +15,6 @@ param(
   [validateset('5.2.1')]
   [alias('v')]
   [string] $version,
-
-  [parameter(HelpMessage='Path to 7-Zip command line tool')]
-  [string] $7ZA = 'C:/tools/7za.exe',
 
   [parameter(HelpMessage='Path to DevKit root directory')]
   [string] $DEVKIT = 'C:/Devkit'

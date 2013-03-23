@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-22 00:29:32 -0600
+# Revision: 2013-03-22 22:50:09 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -12,12 +12,9 @@ param(
   [parameter(Mandatory=$true,
              Position=0,
              HelpMessage='libffi version to build (eg - 3.0.12)')]
-  [alias('i')]
   [validateset('3.0.10','3.0.11','3.0.12')]
+  [alias('v')]
   [string] $version,
-
-  [parameter(HelpMessage='Path to 7-Zip command line tool')]
-  [string] $7ZA = 'C:/tools/7za.exe',
 
   [parameter(HelpMessage='Path to DevKit root directory')]
   [string] $DEVKIT = 'C:/Devkit'

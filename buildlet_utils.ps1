@@ -2,7 +2,14 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-22 14:13:07 -0600
+# Revision: 2013-03-22 22:53:24 -0600
+
+# by default, ensure internal build tools are used
+if (-not "$s7z") {
+  $s7z = "$PWD\tools\7za.exe"
+}
+
+# TODO implement `.\buildlet.conf` customization capability
 
 function Write-Status($msg, $leader='--->', $color='Yellow') {
   Write-Host "$leader $msg" -foregroundcolor $color
@@ -84,7 +91,7 @@ function Validate-Archive() {
 function Extract-Archive() {
   Write-Status "extracting $source"
   $tar_file = "$($source.Substring(0, $source.LastIndexOf('-')))*.tar"
-  (& "$7ZA" "x" $source) -and (& "$7ZA" "x" $tar_file) -and (rm $tar_file) | Out-Null
+  (& "$s7z" "x" $source) -and (& "$s7z" "x" $tar_file) -and (rm $tar_file) | Out-Null
 }
 
 function Activate-Toolchain() {
@@ -97,7 +104,7 @@ function Archive-Build() {
   Push-Location "$install_dir"
     Write-Status "creating binary archive for ${source_dir}"
     $script:bin_archive = "${source_dir}-x86-windows-bin.7z"
-    & "$7ZA" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
+    & "$s7z" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
   Pop-Location
 }
 

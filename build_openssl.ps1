@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-22 14:19:02 -0600
+# Revision: 2013-03-22 22:51:21 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -12,16 +12,13 @@ param(
   [parameter(Mandatory=$true,
              Position=0,
              HelpMessage='OpenSSL version to build (eg - 1.0.1e).')]
-  [alias('v')]
   [validateset('1.0.0k','1.0.1e')]
+  [alias('v')]
   [string] $version,
 
   [parameter(HelpMessage='mingw toolchain flavor to use (eg - mingw, mingw64)')]
   [validateset('mingw','mingw64')]
   [string] $toolchain = 'mingw',
-
-  [parameter(HelpMessage='Path to 7-Zip command line tool')]
-  [string] $7ZA = 'C:/tools/7za.exe',
 
   [parameter(HelpMessage='Path to DevKit root directory')]
   [string] $DEVKIT = 'C:/Devkit',
