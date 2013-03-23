@@ -26,7 +26,7 @@ Assuming you have a capable mingw or mingw-w64 toolchain already installed, typi
 usage can be as simple as the following:
 
 1. Open PowerShell
-2. Download and execute `bootstrap.ps1` to fetch build tools and, optionally, an
+2. Download and execute `bootstrap.ps1` to fetch build tools, and optionally, an
    initial buildlet
 
         PS foo> .\bootstrap.ps1 build_lua
