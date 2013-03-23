@@ -23,12 +23,6 @@ minimalism and modular reusability.
 
 ## Usage
 
-## TODO
-
-* `get_build_deps.ps1` build dependency downloader
-* download source to `downloads` and place binary archives in `pkg`
-* use build customizations from `buildlets.conf` if present
-
 ## License
 
 3-clause BSD
