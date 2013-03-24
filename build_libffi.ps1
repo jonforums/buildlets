@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-23 00:08:34 -0600
+# Revision: 2013-03-23 20:55:50 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -77,7 +77,10 @@ Push-Location "${source_dir}"
   # archive
   Archive-Build
 
+  # hoist binary archive to top level
+  Move-ArchiveToRoot
+
 Pop-Location
 
-# hoist binary archive and cleanup
+# cleanup
 Clean-Build

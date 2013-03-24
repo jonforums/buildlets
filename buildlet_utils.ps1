@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-23 20:35:23 -0600
+# Revision: 2013-03-23 21:00:42 -0600
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
@@ -117,8 +117,11 @@ function Archive-Build() {
   Pop-Location
 }
 
+function Move-ArchiveToRoot() {
+  mv "$install_dir/$bin_archive" "$buildlet_root" -force
+}
+
 function Clean-Build() {
   Write-Status "cleaning up"
-  mv "$install_dir/$bin_archive" "$PWD" -force
   rm "${source_dir}" -recurse -force
 }
