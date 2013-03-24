@@ -2,7 +2,10 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-23 00:13:51 -0600
+# Revision: 2013-03-23 20:35:23 -0600
+
+# buildlet execution root directory
+$buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
 
 # default toolchain location
 if (-not "$devkit") {
