@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-26 00:50:30 -0600
+# Revision: 2013-03-26 21:17:58 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -57,21 +57,22 @@ Push-Location "${source_dir}"
   Activate-Toolchain
 
   # configure tools
-  Write-Status "configuring ${source_dir} tools"
-  $install_dir = "$($PWD.ToString().Replace('\','/'))/my_install"
-  New-Item "$install_dir/bin","$install_dir/include","$install_dir/include/lzma", `
-           "$install_dir/lib","$install_dir/doc" -itemtype directory | Out-Null
-  $cfg_args = @('--disable-nls'
-                '--disable-scripts'
-                '--disable-threads'
-                '--disable-shared'
-                '--enable-small'
-                "CFLAGS='-Os'")
-  sh -c "./configure $($cfg_args -join ' ')" | Out-Null
+  Configure-Build {
+    New-Item "$install_dir/bin","$install_dir/include","$install_dir/include/lzma", `
+             "$install_dir/lib","$install_dir/doc" -itemtype directory | Out-Null
+    $cfg_args = @('--disable-nls'
+                  '--disable-scripts'
+                  '--disable-threads'
+                  '--disable-shared'
+                  '--enable-small'
+                  "CFLAGS='-Os'")
+    sh -c "./configure $($cfg_args -join ' ')" | Out-Null
+  }
 
   # build tools
-  Write-Status "building ${source_dir} tools"
-  sh -c "make" | Out-Null
+  New-Build {
+    sh -c "make" | Out-Null
+  }
 
   # install tools and clean
   cp src/xzdec/xzdec.exe, src/xzdec/lzmadec.exe "$install_dir/bin" | Out-Null
@@ -79,25 +80,27 @@ Push-Location "${source_dir}"
   sh -c "make distclean" | Out-Null
 
   # configure primary xz.exe tool and developer libraries
-  Write-Status "configuring ${source_dir}"
-  $cfg_args = @('--disable-nls'
-                '--disable-scripts'
-                '--disable-threads'
-                "CFLAGS='-O2'")
-  sh -c "./configure $($cfg_args -join ' ')" | Out-Null
+  Configure-Build {
+    $cfg_args = @('--disable-nls'
+                  '--disable-scripts'
+                  '--disable-threads'
+                  "CFLAGS='-O2'")
+    sh -c "./configure $($cfg_args -join ' ')" | Out-Null
+  }
 
   # build
-  Write-Status "building ${source_dir}"
-  Push-Location 'src/liblzma'
-    sh -c "make" | Out-Null
-  Pop-Location
-  Push-Location 'src/xz'
-    sh -c "make LDFLAGS=-static" | Out-Null
-  Pop-Location
+  New-Build {
+    Push-Location 'src/liblzma'
+      sh -c "make" | Out-Null
+    Pop-Location
+    Push-Location 'src/xz'
+      sh -c "make LDFLAGS=-static" | Out-Null
+    Pop-Location
+  }
 
   # install
   cp src/xz/xz.exe "$install_dir/bin" | Out-Null
-	cp src/liblzma/.libs/liblzma-*.dll "$install_dir/bin/liblzma.dll" | Out-Null
+  cp src/liblzma/.libs/liblzma-*.dll "$install_dir/bin/liblzma.dll" | Out-Null
   cp src/liblzma/api/lzma.h "$install_dir/include" | Out-Null
   cp src/liblzma/api/lzma/*.h "$install_dir/include/lzma" | Out-Null
   cp src/liblzma/.libs/liblzma.a "$install_dir/lib" | Out-Null

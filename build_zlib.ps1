@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-23 20:55:06 -0600
+# Revision: 2013-03-26 20:52:24 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -57,12 +57,12 @@ Push-Location "${source_dir}"
   Activate-Toolchain
 
   # configure
-  Write-Status "configuring ${source_dir}"
-  $install_dir = "$($PWD.ToString().Replace('\','/'))/my_install"
+  Configure-Build
 
   # build
-  Write-Status "building ${source_dir}"
-  sh -c "make -f win32/Makefile.gcc" | Out-Null
+  New-Build {
+    sh -c "make -f win32/Makefile.gcc" | Out-Null
+  }
 
   # install
   $install_opts = @("BINARY_PATH=${install_dir}/bin",

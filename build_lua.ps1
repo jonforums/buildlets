@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-23 20:55:15 -0600
+# Revision: 2013-03-26 21:04:07 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -57,18 +57,19 @@ Push-Location "${source_dir}"
   Activate-Toolchain
 
   # configure
-  Write-Status "configuring ${source_dir}"
-  $install_dir = "$($PWD.ToString().Replace('\','/'))/my_install"
-  $maj_min = ($version -split '\.')[0..1] -join ''
-  $to_bin = 'lua.exe','luac.exe',"lua${maj_min}.dll"
-  $to_inc = 'lua.h','luaconf.h','lualib.h','lauxlib.h','lua.hpp'
-  $to_lib = 'liblua.a'
+  Configure-Build {
+    $maj_min = ($version -split '\.')[0..1] -join ''
+    $script:to_bin = 'lua.exe','luac.exe',"lua${maj_min}.dll"
+    $script:to_inc = 'lua.h','luaconf.h','lualib.h','lauxlib.h','lua.hpp'
+    $script:to_lib = 'liblua.a'
+  }
 
   # build
-  Write-Status "building ${source_dir}"
-  Push-Location src
-    sh -c "make mingw" | Out-Null
-  Pop-Location
+  New-Build {
+    Push-Location src
+      sh -c "make mingw" | Out-Null
+    Pop-Location
+  }
 
   # install
   Push-Location src

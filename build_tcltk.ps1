@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-24 15:38:43 -0600
+# Revision: 2013-03-26 21:57:22 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -71,17 +71,19 @@ foreach ($source_dir in "tcl${version}", "tk${version}") {
     Activate-Toolchain
 
     # configure
-    Write-Status "configuring $source_dir"
-    $clean_pwd = $(Split-Path $PWD -parent).Replace('\','/')
-    $install_dir = "$clean_pwd/my_install"
-    $cfg_args = "--prefix=$install_dir --enable-threads"
-    if ($source_dir -match '^tcl') { $tcl_build_dir = "$clean_pwd/win" }
-    if ($source_dir -match '^tk') { $cfg_args += " --with-tcl=$tcl_build_dir" }
-    sh -c "./configure $cfg_args" | Out-Null
+    Configure-Build {
+      $clean_pwd = $(Split-Path $PWD -parent).Replace('\','/')
+      $script:install_dir = "$clean_pwd/my_install"
+      $cfg_args = "--prefix=$install_dir --enable-threads"
+      if ($source_dir -match '^tcl') { $script:tcl_build_dir = "$clean_pwd/win" }
+      if ($source_dir -match '^tk') { $cfg_args += " --with-tcl=$tcl_build_dir" }
+      sh -c "./configure $cfg_args" | Out-Null
+    }
 
     # build
-    Write-Status "building $source_dir"
-    sh -c "make" | Out-Null
+    New-Build {
+      sh -c "make" | Out-Null
+    }
 
     # install
     sh -c "make install" | Out-Null

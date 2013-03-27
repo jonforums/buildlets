@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-23 20:54:31 -0600
+# Revision: 2013-03-26 21:31:08 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -72,13 +72,14 @@ Push-Location "${source_dir}"
   $env:CPATH = "$ZLIBDIR/include"
 
   # configure
-  Write-Status "configuring ${source_dir}"
-  $install_dir = "$($PWD.ToString().Replace('\','/'))/my_install"
-  perl Configure $toolchain zlib-dynamic shared --prefix="$install_dir" | Out-Null
+  Configure-Build {
+    perl Configure $toolchain zlib-dynamic shared --prefix="$install_dir" | Out-Null
+  }
 
   # build
-  Write-Status "building ${source_dir}"
-  sh -c "make" | Out-Null
+  New-Build {
+    sh -c "make" | Out-Null
+  }
 
   # install
   sh -c "make install_sw" | Out-Null
