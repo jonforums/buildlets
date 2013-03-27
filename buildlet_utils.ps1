@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-23 21:00:42 -0600
+# Revision: 2013-03-26 21:35:50 -0600
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
@@ -103,10 +103,35 @@ function Extract-Archive() {
   (& "$s7z" "x" $source) -and (& "$s7z" "x" $tar_file) -and (rm $tar_file) | Out-Null
 }
 
+# TODO return if already active on $env:PATH
+#      allow custom status message
+#      update to accept and invoke an optional script block
 function Activate-Toolchain() {
-  # TODO return if already active on $env:PATH
   Write-Status "activating toolchain"
   . "${devkit}\devkitvars.ps1" | Out-Null
+}
+
+# TODO allow custom status message
+function Configure-Build() {
+  param (
+    [System.Management.Automation.ScriptBlock] $block
+  )
+
+  Write-Status "configuring ${source_dir}"
+  $script:install_dir = "$($PWD.ToString().Replace('\','/'))/my_install"
+
+  if ($block) { $block.Invoke() }
+}
+
+# TODO allow custom status message
+function New-Build() {
+  param (
+    [System.Management.Automation.ScriptBlock] $block
+  )
+
+  Write-Status "building ${source_dir}"
+
+  if ($block) { $block.Invoke() }
 }
 
 function Archive-Build() {
