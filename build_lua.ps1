@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-26 21:04:07 -0600
+# Revision: 2013-03-30 15:46:50 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -11,8 +11,8 @@
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='lua version to build (eg - 5.2.1)')]
-  [validateset('5.2.1')]
+             HelpMessage='lua version to build (eg - 5.2.2)')]
+  [validateset('5.2.1','5.2.2')]
   [alias('v')]
   [string] $version,
 
