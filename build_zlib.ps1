@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-26 20:52:24 -0600
+# Revision: 2013-05-07 15:45:10 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -11,8 +11,8 @@
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='zlib version to build (eg - 1.2.7)')]
-  [validateset('1.2.7')]
+             HelpMessage='zlib version to build (eg - 1.2.8)')]
+  [validateset('1.2.7','1.2.8')]
   [alias('v')]
   [string] $version,
 
