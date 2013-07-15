@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-26 21:35:50 -0600
+# Revision: 2013-07-14 21:44:23 -0600
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
@@ -101,6 +101,11 @@ function Extract-Archive() {
   Write-Status "extracting $source"
   $tar_file = "$($source.Substring(0, $source.LastIndexOf('-')))*.tar"
   (& "$s7z" "x" $source) -and (& "$s7z" "x" $tar_file) -and (rm $tar_file) | Out-Null
+}
+
+function Extract-SimpleArchive {
+  Write-Status "extracting $source"
+  (& "$s7z" "x" $source -o"${source_dir}") | Out-Null
 }
 
 # TODO return if already active on $env:PATH
