@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-07-14 21:44:23 -0600
+# Revision: 2013-07-15 15:23:45 -0600
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
@@ -103,9 +103,18 @@ function Extract-Archive() {
   (& "$s7z" "x" $source) -and (& "$s7z" "x" $tar_file) -and (rm $tar_file) | Out-Null
 }
 
-function Extract-SimpleArchive {
+function Extract-CustomArchive {
+  param (
+    [System.Management.Automation.ScriptBlock] $block
+  )
+
   Write-Status "extracting $source"
-  (& "$s7z" "x" $source -o"${source_dir}") | Out-Null
+
+  if ($block) {
+    $block.Invoke()
+  } else {
+    (& "$s7z" "x" $source -o"${source_dir}") | Out-Null
+  }
 }
 
 # TODO return if already active on $env:PATH
