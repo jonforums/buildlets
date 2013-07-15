@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-27 01:24:11 -0600
+# Revision: 2013-07-14 20:53:57 -0600
 
 param (
     [parameter(Mandatory=$false,
@@ -24,6 +24,7 @@ $buildlets = @('build_bzip2'
                'build_minised'
                'build_openssl'
                'build_tcltk'
+               'build_unqlite'
                'build_zlib'
               )
 $buildlet_uri = 'https://raw.github.com/jonforums/buildlets/master/'
