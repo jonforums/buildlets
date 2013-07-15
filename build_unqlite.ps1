@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-07-14 18:53:29 -0600
+# Revision: 2013-07-15 09:34:17 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -22,7 +22,7 @@ param(
 
 $libname = 'unqlite'
 $source = "${libname}-db-$(${version}.Replace('.', '')).zip"
-$source_dir = "${libname}"
+$source_dir = "${libname}-${version}"
 $repo_root = 'http://unqlite.org/db/'
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
@@ -58,8 +58,6 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
-    New-Item "$install_dir/bin","$install_dir/include", `
-             "$install_dir/lib" -itemtype directory | Out-Null
     $defines = '-D_WIN32_WINNT=0x0501'
     $script:cflags = "-g $defines -Wall -Wextra -O2"
   }
@@ -72,6 +70,8 @@ Push-Location "${source_dir}"
   }
 
   # install
+  New-Item "$install_dir/bin","$install_dir/include", `
+           "$install_dir/lib" -itemtype directory | Out-Null
   cp "${libname}.dll" "$install_dir/bin" | Out-Null
   cp "${libname}.h" "$install_dir/include" | Out-Null
   cp "lib${libname}.a", "lib${libname}.dll.a" "$install_dir/lib" | Out-Null
