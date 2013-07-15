@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-07-15 15:23:45 -0600
+# Revision: 2013-07-15 17:37:32 -0600
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
@@ -144,6 +144,17 @@ function New-Build() {
   )
 
   Write-Status "building ${source_dir}"
+
+  if ($block) { $block.Invoke() }
+}
+
+# TODO allow custom status message
+function Stage-Build() {
+  param (
+    [System.Management.Automation.ScriptBlock] $block
+  )
+
+  Write-Status "staging ${source_dir}"
 
   if ($block) { $block.Invoke() }
 }
