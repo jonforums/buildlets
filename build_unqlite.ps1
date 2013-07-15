@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-07-15 15:24:03 -0600
+# Revision: 2013-07-15 17:39:06 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -69,13 +69,15 @@ Push-Location "${source_dir}"
     sh -c "ar rcs lib${libname}.a ${libname}.o" | Out-Null
   }
 
-  # install
-  New-Item "$install_dir/bin","$install_dir/include", `
-           "$install_dir/lib" -itemtype directory | Out-Null
-  cp "${libname}.dll" "$install_dir/bin" | Out-Null
-  cp "${libname}.h" "$install_dir/include" | Out-Null
-  cp "lib${libname}.a", "lib${libname}.dll.a" "$install_dir/lib" | Out-Null
-  cp "${libname}.def" "$install_dir/lib" | Out-Null
+  # stage
+  Stage-Build {
+    New-Item "$install_dir/bin","$install_dir/include", "$install_dir/lib" `
+             -itemtype directory | Out-Null
+    cp "${libname}.dll" "$install_dir/bin" | Out-Null
+    cp "${libname}.h" "$install_dir/include" | Out-Null
+    cp "lib${libname}.a", "lib${libname}.dll.a" "$install_dir/lib" | Out-Null
+    cp "${libname}.def" "$install_dir/lib" | Out-Null
+  }
 
   # archive
   Archive-Build
