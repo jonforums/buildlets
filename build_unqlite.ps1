@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-07-15 09:34:17 -0600
+# Revision: 2013-07-15 15:24:03 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -48,7 +48,7 @@ Fetch-Archive
 Validate-Archive
 
 # extract
-Extract-SimpleArchive
+Extract-CustomArchive
 
 # patch, configure, build, archive
 Push-Location "${source_dir}"
