@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-03-26 21:57:22 -0600
+# Revision: 2013-11-02 19:39:45 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -11,8 +11,8 @@
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='TclTk version to build (eg - 8.6.0)')]
-  [validateset('8.5.13','8.6.0')]
+             HelpMessage='TclTk version to build (eg - 8.6.1)')]
+  [validateset('8.5.13','8.6.0','8.6.1')]
   [alias('v')]
   [string] $version,
 
