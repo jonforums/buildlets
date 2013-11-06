@@ -16,7 +16,7 @@ minimalism and modular reusability.
 
 ## Dependencies
 
-* PowerShell 2.0+
+* PowerShell 3.0+
 * Live internet connection
 * MinGW or mingw-w64 based toolchain with MSYS, Autotools, and Perl superpowers.
   Currently, buildlets assumes a DevKit structured toolchain using a `devkitvars.ps1`
@@ -29,16 +29,47 @@ Assuming you have a capable mingw or mingw-w64 toolchain already installed, typi
 usage can be as simple as the following:
 
 1. Open PowerShell
-2. Download and execute `bootstrap.ps1` to fetch build tools, and optionally, an
-   initial buildlet
+2. Download the `bootstrap.ps1` script
+
+        curl
+        ====
+          curl --cacert C:\tools\cacert.pem -L -O https://raw.github.com/jonforums/buildlets/master/bootstrap.ps1
+
+        powershell
+        ==========
+          powershell -command "(new-object System.Net.WebClient).DownloadFile('https://raw.github.com/jonforums/buildlets/master/bootstrap.ps1', 'bootstrap.ps1')"
+
+3. Create a `toolchain.json` file describing the `PATH` requirements of your build toolchains
+
+        {
+          "x32": {
+            "path": [
+              "C:/DevKit-x32-4.7.3/bin",
+              "C:/DevKit-x32-4.7.3/mingw/bin"
+            ]
+          },
+
+          "x64": {
+            "path": [
+              "C:/Apps/DevTools/msys/bin",
+              "C:/Apps/DevTools/mingw/bin"
+            ]
+          }
+        }
+
+4. Execute `bootstrap.ps1` to fetch build tools, and optionally, an initial buildlet
 
         PS foo> .\bootstrap.ps1 ls
 
         == Available Buildlets ==
+           build_bzip2
            build_libffi
+           build_libiconv
+           build_liblzma
            build_lua
            build_minised
            build_openssl
+           build_tcltk
            build_zlib
            ...
 
@@ -47,7 +78,7 @@ usage can be as simple as the following:
         ---> downloading tool: 7za.exe
         ---> downloading build_lua.ps1
 
-3. Execute the buildlet
+5. Execute the buildlet
 
         PS foo> .\build_lua.ps1 5.2.1
         ---> fetching buildlet library
