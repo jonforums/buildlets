@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-07 16:21:17 -0600
+# Revision: 2013-11-07 17:01:56 -0600
 
 $script:original_path = $env:PATH
 
@@ -20,12 +20,18 @@ function private:Validate-Toolchain() {
   if ($toolchain.x32.path -isnot [System.Array]) {
     throw '[ERROR] 32-bit toolchain PATH info must be in an array'
   }
+  if (-not ($toolchain.x32.path.count -gt 0)) {
+    throw '[ERROR] 32-bit toolchain PATH array must contain paths'
+  }
   if ($toolchain.x64) {
     if (-not ($toolchain.x64.path)) {
       throw '[ERROR] must provide PATH information for the 64-bit toolchain'
     }
     if ($toolchain.x64.path -isnot [System.Array]) {
       throw '[ERROR] 64-bit toolchain PATH info must be in an array'
+    }
+    if (-not ($toolchain.x64.path.count -gt 0)) {
+      throw '[ERROR] 32-bit toolchain PATH array must contain paths'
     }
   }
 }
@@ -158,6 +164,9 @@ function Activate-Toolchain() {
   if (-not ($block)) {
     $new_path = $toolchain.x32.path -join ';'
     if ($x64) {
+      if (-not $toolchain.x64) {
+        throw '[ERROR] must provide 64-bit toolchain configuration'
+      }
       $new_path = $toolchain.x64.path -join ';'
     }
     $env:PATH = "${new_path};${env:PATH}"
@@ -203,7 +212,8 @@ function Stage-Build() {
 function Archive-Build() {
   Push-Location "$install_dir"
     Write-Status "creating binary archive for ${source_dir}"
-    $script:bin_archive = "${source_dir}-x86-windows-bin.7z"
+    if ($x64) { $arch = 'x64' } else { $arch = 'x86' }
+    $script:bin_archive = "${source_dir}-${arch}-windows-bin.7z"
     & "$s7z" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
   Pop-Location
 }
