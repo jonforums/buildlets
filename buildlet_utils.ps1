@@ -2,14 +2,45 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-05 18:55:16 -0600
+# Revision: 2013-11-07 16:21:17 -0600
+
+$script:original_path = $env:PATH
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
 
-# default toolchain location
-if (-not "$devkit") {
-  $devkit = 'C:\DevKit-4.7.2'
+# parse and validate user specified toolchain configuration data
+function private:Validate-Toolchain() {
+  if (-not ($toolchain.x32)) {
+    throw '[ERROR] must provide a 32-bit toolchain configuration'
+  }
+  if (-not ($toolchain.x32.path)) {
+    throw '[ERROR] must provide PATH information for the 32-bit toolchain'
+  }
+  if ($toolchain.x32.path -isnot [System.Array]) {
+    throw '[ERROR] 32-bit toolchain PATH info must be in an array'
+  }
+  if ($toolchain.x64) {
+    if (-not ($toolchain.x64.path)) {
+      throw '[ERROR] must provide PATH information for the 64-bit toolchain'
+    }
+    if ($toolchain.x64.path -isnot [System.Array]) {
+      throw '[ERROR] 64-bit toolchain PATH info must be in an array'
+    }
+  }
+}
+
+try {
+  if (Test-Path 'toolchain.json') {
+    $toolchain = Get-Content 'toolchain.json' | Out-String | ConvertFrom-Json
+    Validate-Toolchain
+  }
+  else {
+    throw '[ERROR] must provide `toolchain.json` config file'
+  }
+}
+catch {
+  throw $Error[0]
 }
 
 # by default, ensure internal build tools are used
@@ -117,12 +148,22 @@ function Extract-CustomArchive {
   }
 }
 
-# TODO return if already active on $env:PATH
-#      allow custom status message
-#      update to accept and invoke an optional script block
+# TODO allow custom status message
 function Activate-Toolchain() {
+  param (
+    [System.Management.Automation.ScriptBlock] $block
+  )
+
   Write-Status "activating toolchain"
-  . "${devkit}\devkitvars.ps1" | Out-Null
+  if (-not ($block)) {
+    $new_path = $toolchain.x32.path -join ';'
+    if ($x64) {
+      $new_path = $toolchain.x64.path -join ';'
+    }
+    $env:PATH = "${new_path};${env:PATH}"
+  }
+
+  if ($block) { $block.Invoke() }
 }
 
 # TODO allow custom status message
@@ -174,4 +215,5 @@ function Move-ArchiveToRoot() {
 function Clean-Build() {
   Write-Status "cleaning up"
   rm "${source_dir}" -recurse -force
+  $env:PATH = $original_path
 }
