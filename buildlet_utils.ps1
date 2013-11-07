@@ -1,8 +1,8 @@
-#requires -version 2.0
+#requires -version 3.0
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-07-15 17:37:32 -0600
+# Revision: 2013-11-05 18:55:16 -0600
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path

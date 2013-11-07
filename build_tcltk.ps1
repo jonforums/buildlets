@@ -1,8 +1,8 @@
-#requires -version 2.0
+#requires -version 3.0
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-02 19:39:45 -0600
+# Revision: 2013-11-05 18:54:05 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module

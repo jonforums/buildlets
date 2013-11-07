@@ -1,8 +1,8 @@
-#requires -version 2.0
+#requires -version 3.0
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-02 20:07:19 -0600
+# Revision: 2013-11-05 18:49:33 -0600
 
 param (
     [parameter(Mandatory=$false,
