@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-07 17:01:56 -0600
+# Revision: 2013-11-07 17:50:59 -0600
 
 $script:original_path = $env:PATH
 
@@ -160,7 +160,8 @@ function Activate-Toolchain() {
     [System.Management.Automation.ScriptBlock] $block
   )
 
-  Write-Status "activating toolchain"
+  if ($x64) { $arch = '[64-bit]' }
+  Write-Status "activating toolchain ${arch}"
   if (-not ($block)) {
     $new_path = $toolchain.x32.path -join ';'
     if ($x64) {
@@ -181,7 +182,8 @@ function Configure-Build() {
     [System.Management.Automation.ScriptBlock] $block
   )
 
-  Write-Status "configuring ${source_dir}"
+  if ($x64) { $arch = '[64-bit]' }
+  Write-Status "configuring ${source_dir} ${arch}"
   $script:install_dir = "$($PWD.ToString().Replace('\','/'))/my_install"
 
   if ($block) { $block.Invoke() }
@@ -193,7 +195,8 @@ function New-Build() {
     [System.Management.Automation.ScriptBlock] $block
   )
 
-  Write-Status "building ${source_dir}"
+  if ($x64) { $arch = '[64-bit]' }
+  Write-Status "building ${source_dir} ${arch}"
 
   if ($block) { $block.Invoke() }
 }
@@ -204,14 +207,16 @@ function Stage-Build() {
     [System.Management.Automation.ScriptBlock] $block
   )
 
-  Write-Status "staging ${source_dir}"
+  if ($x64) { $arch = '[64-bit]' }
+  Write-Status "staging ${source_dir} ${arch}"
 
   if ($block) { $block.Invoke() }
 }
 
 function Archive-Build() {
   Push-Location "$install_dir"
-    Write-Status "creating binary archive for ${source_dir}"
+    if ($x64) { $arch = '[64-bit]' }
+    Write-Status "creating binary archive for ${source_dir} ${arch}"
     if ($x64) { $arch = 'x64' } else { $arch = 'x86' }
     $script:bin_archive = "${source_dir}-${arch}-windows-bin.7z"
     & "$s7z" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
