@@ -91,6 +91,16 @@ usage can be as simple as the following:
         ---> creating binary archive for lua-5.2.1
         ---> cleaning up
 
+        PS foo> .\build_lua.ps1 5.2.2 -x64
+        ---> downloading http://www.lua.org/ftp/lua-5.2.2.tar.gz
+        ---> validating lua-5.2.2.tar.gz
+        ---> extracting lua-5.2.2.tar.gz
+        ---> activating toolchain [64-bit]
+        ---> configuring lua-5.2.2 [64-bit]
+        ---> building lua-5.2.2 [64-bit]
+        ---> creating binary archive for lua-5.2.2 [64-bit]
+        ---> cleaning up
+
 ## License
 
 3-clause BSD
