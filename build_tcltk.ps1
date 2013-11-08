@@ -2,11 +2,10 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-05 18:54:05 -0600
+# Revision: 2013-11-07 21:09:12 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
-#   - support x64 builds (configure's --enable-64bit)
 
 param(
   [parameter(Mandatory=$true,
@@ -16,8 +15,8 @@ param(
   [alias('v')]
   [string] $version,
 
-  [parameter(HelpMessage='Path to DevKit root directory')]
-  [string] $devkit = $nil
+  [parameter(HelpMessage='perform a 64-bit build')]
+  [switch] $x64
 )
 
 $sources = @{tcl = "tcl${version}-src.tar.gz"; tk = "tk${version}-src.tar.gz"}
@@ -77,7 +76,9 @@ foreach ($source_dir in "tcl${version}", "tk${version}") {
       $cfg_args = "--prefix=$install_dir --enable-threads"
       if ($source_dir -match '^tcl') { $script:tcl_build_dir = "$clean_pwd/win" }
       if ($source_dir -match '^tk') { $cfg_args += " --with-tcl=$tcl_build_dir" }
-      sh -c "./configure $cfg_args" | Out-Null
+      # FIXME config.guess cannot guess system type
+      if ($x64) { $triplets = '--build=x86_64-w64-mingw32' }
+      sh -c "./configure $cfg_args ${triplets}" | Out-Null
     }
 
     # build
