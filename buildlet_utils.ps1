@@ -2,8 +2,9 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-07 17:50:59 -0600
+# Revision: 2013-11-08 00:42:52 -0600
 
+# save the clean path
 $script:original_path = $env:PATH
 
 # buildlet execution root directory
@@ -213,18 +214,40 @@ function Stage-Build() {
   if ($block) { $block.Invoke() }
 }
 
+function script:New-FileHash($path) {
+  try {
+    $hasher = New-Object System.Security.Cryptography.SHA1Cng
+
+    $fs = New-Object System.IO.FileStream $path, 'Open', 'Read'
+    return [BitConverter]::ToString($hasher.ComputeHash($fs)).Replace('-','').ToLower()
+  }
+  catch {
+    throw "[ERROR] unable to hash $path"
+  }
+  finally {
+    $fs.Close()
+  }
+}
+
 function Archive-Build() {
   Push-Location "$install_dir"
     if ($x64) { $arch = '[64-bit]' }
     Write-Status "creating binary archive for ${source_dir} ${arch}"
     if ($x64) { $arch = 'x64' } else { $arch = 'x86' }
     $script:bin_archive = "${source_dir}-${arch}-windows-bin.7z"
+    $script:bin_archive_hash = "$bin_archive.sha1"
+
     & "$s7z" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
+
+    "$(New-FileHash $PWD/$bin_archive) ?SHA1*${bin_archive}" |
+      Out-File -encoding ASCII $bin_archive_hash
+
   Pop-Location
 }
 
 function Move-ArchiveToRoot() {
   mv "$install_dir/$bin_archive" "$buildlet_root" -force
+  mv "$install_dir/$bin_archive_hash" "$buildlet_root" -force
 }
 
 function Clean-Build() {
