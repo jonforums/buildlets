@@ -2,11 +2,10 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-05 18:53:51 -0600
+# Revision: 2013-11-07 17:14:32 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
-#   - add x86/x64 dynamic package naming
 
 param(
   [parameter(Mandatory=$true,
@@ -16,16 +15,12 @@ param(
   [alias('v')]
   [string] $version,
 
-  [parameter(HelpMessage='mingw toolchain flavor to use (eg - mingw, mingw64)')]
-  [validateset('mingw','mingw64')]
-  [string] $toolchain = 'mingw',
-
-  [parameter(HelpMessage='Path to DevKit root directory')]
-  [string] $devkit = $nil,
+  [parameter(HelpMessage='perform a 64-bit build')]
+  [switch] $x64,
 
   [parameter(HelpMessage='Path to zlib dev libraries root directory')]
   [alias('with-zlib-dir')]
-  [string] $ZLIBDIR = 'C:/devlibs/zlib-1.2.7'
+  [string] $ZLIBDIR = 'C:/devlibs/zlib/x86/1.2.8'
 )
 
 $libname = 'openssl'
@@ -34,6 +29,8 @@ $source_dir = "${libname}-${version}"
 $repo_root = 'http://www.openssl.org/source/'
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
+
+if ($x64) { $mingw_flavor = 'mingw64' } else { $mingw_flavor = 'mingw' }
 
 # download and source the buildlet library
 if (-not (Test-Path "$PWD\buildlet_utils.ps1")) {
@@ -73,7 +70,7 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
-    perl Configure $toolchain zlib-dynamic shared --prefix="$install_dir" | Out-Null
+    perl Configure $mingw_flavor zlib-dynamic shared --prefix="$install_dir" | Out-Null
   }
 
   # build
