@@ -2,11 +2,10 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-05 18:50:54 -0600
+# Revision: 2013-11-07 20:12:04 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
-#   - add x86/x64 dynamic package naming
 
 param(
   [parameter(Mandatory=$true,
@@ -16,8 +15,8 @@ param(
   [alias('v')]
   [string] $version,
 
-  [parameter(HelpMessage='Path to DevKit root directory')]
-  [string] $devkit = $nil
+  [parameter(HelpMessage='perform a 64-bit build')]
+  [switch] $x64
 )
 
 $libname = 'libiconv'
@@ -58,7 +57,9 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
-    sh -c "./configure --prefix=${install_dir}" | Out-Null
+    # FIXME config.guess cannot guess system type
+    if ($x64) { $triplets = '--build=x86_64-w64-mingw32' }
+    sh -c "./configure --prefix=${install_dir} ${triplets}" | Out-Null
   }
 
   # build
