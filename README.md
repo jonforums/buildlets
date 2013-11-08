@@ -17,6 +17,7 @@ minimalism and modular reusability.
 ## Dependencies
 
 * PowerShell 3.0+
+* .NET Framework v3.5+
 * Live internet connection
 * MinGW or mingw-w64 based toolchain with MSYS, Autotools, and Perl superpowers.
   Currently, buildlets requires that you create a `toolchain.json` file describing
