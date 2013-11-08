@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-07 21:09:12 -0600
+# Revision: 2013-11-08 14:13:00 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -78,7 +78,8 @@ foreach ($source_dir in "tcl${version}", "tk${version}") {
       if ($source_dir -match '^tk') { $cfg_args += " --with-tcl=$tcl_build_dir" }
       # FIXME config.guess cannot guess system type
       if ($x64) { $triplets = '--build=x86_64-w64-mingw32' }
-      sh -c "./configure $cfg_args ${triplets}" | Out-Null
+
+      sh -c "./configure ${cfg_args} ${triplets}" | Out-Null
     }
 
     # build
