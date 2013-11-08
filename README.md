@@ -57,7 +57,8 @@ usage can be as simple as the following:
           }
         }
 
-4. Execute `bootstrap.ps1` to fetch build tools, and optionally, an initial buildlet
+4. Execute `bootstrap.ps1` to list available buildlets, automatically fetch any
+   required build tool, and optionally, download an initial buildlet
 
         PS foo> .\bootstrap.ps1 ls
 
