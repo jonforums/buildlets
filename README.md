@@ -19,9 +19,8 @@ minimalism and modular reusability.
 * PowerShell 3.0+
 * Live internet connection
 * MinGW or mingw-w64 based toolchain with MSYS, Autotools, and Perl superpowers.
-  Currently, buildlets assumes a DevKit structured toolchain using a `devkitvars.ps1`
-  to activate the toolchain into `PATH`. This behavior will be enhanced via
-  [Issue 3](https://github.com/jonforums/buildlets/issues/3)
+  Currently, buildlets requires that you create a `toolchain.json` file describing
+  the relevant `PATH` to your 32-bit and 64-bit msys/mingw-based toolchains.
 
 ## Basic Usage
 
