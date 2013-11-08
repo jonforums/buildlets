@@ -2,11 +2,10 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-05 18:51:05 -0600
+# Revision: 2013-11-07 20:27:09 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
-#   - add x86/x64 dynamic package naming
 
 param(
   [parameter(Mandatory=$true,
@@ -16,8 +15,8 @@ param(
   [alias('v')]
   [string] $version,
 
-  [parameter(HelpMessage='Path to DevKit root directory')]
-  [string] $devkit = $nil
+  [parameter(HelpMessage='perform a 64-bit build')]
+  [switch] $x64
 )
 
 $libname = 'xz'
@@ -66,7 +65,9 @@ Push-Location "${source_dir}"
                   '--disable-shared'
                   '--enable-small'
                   "CFLAGS='-Os'")
-    sh -c "./configure $($cfg_args -join ' ')" | Out-Null
+    # FIXME config.guess cannot guess system type
+    if ($x64) { $triplets = '--build=x86_64-w64-mingw32' }
+    sh -c "./configure $($cfg_args -join ' ') ${triplets}" | Out-Null
   }
 
   # build tools
@@ -85,7 +86,9 @@ Push-Location "${source_dir}"
                   '--disable-scripts'
                   '--disable-threads'
                   "CFLAGS='-O2'")
-    sh -c "./configure $($cfg_args -join ' ')" | Out-Null
+    # FIXME config.guess cannot guess system type
+    if ($x64) { $triplets = '--build=x86_64-w64-mingw32' }
+    sh -c "./configure $($cfg_args -join ' ') ${triplets}" | Out-Null
   }
 
   # build
