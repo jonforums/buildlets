@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-08 00:42:52 -0600
+# Revision: 2013-11-09 14:59:01 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -47,7 +47,7 @@ try {
   }
 }
 catch {
-  throw $Error[0]
+  throw
 }
 
 # by default, ensure internal build tools are used
