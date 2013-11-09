@@ -2,26 +2,25 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-05 18:54:18 -0600
+# Revision: 2013-11-09 17:11:01 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
-#   - add x86/x64 dynamic package naming
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='unqlite version to build (eg - 1.1.6).')]
-  [validateset('1.1.6')]
+             HelpMessage='unqlite version to build (eg - 20130825-116).')]
+  [validateset('20130825-116')]
   [alias('v')]
   [string] $version,
 
-  [parameter(HelpMessage='Path to DevKit root directory')]
-  [string] $devkit = $nil
+  [parameter(HelpMessage='perform a 64-bit build')]
+  [switch] $x64
 )
 
 $libname = 'unqlite'
-$source = "${libname}-db-$(${version}.Replace('.', '')).zip"
+$source = "${libname}-db-${version}.zip"
 $source_dir = "${libname}-${version}"
 $repo_root = 'http://unqlite.org/db/'
 $archive = "${repo_root}${source}"
