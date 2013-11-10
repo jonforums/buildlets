@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-10 14:41:30 -0600
+# Revision: 2013-11-10 15:15:02 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -65,9 +65,6 @@ Push-Location "${source_dir}"
 
   # archive
   Archive-Build
-
-  # hoist binary archive to top level
-  Move-ArchiveToRoot
 
 Pop-Location
 

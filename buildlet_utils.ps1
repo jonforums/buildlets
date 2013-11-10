@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-09 14:59:01 -0600
+# Revision: 2013-11-10 15:13:03 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -229,6 +229,16 @@ function script:New-FileHash($path) {
   }
 }
 
+function script:Move-ArchiveToPkg() {
+  $pkg_root = "$buildlet_root/pkg"
+  if (-not (Test-Path "$pkg_root" -type container)) {
+    New-Item $pkg_root -itemtype directory -force | Out-Null
+  }
+
+  mv "$install_dir/$bin_archive" "$pkg_root" -force
+  mv "$install_dir/$bin_archive_hash" "$pkg_root" -force
+}
+
 function Archive-Build() {
   Push-Location "$install_dir"
     if ($x64) { $arch = '[64-bit]' }
@@ -242,12 +252,9 @@ function Archive-Build() {
     "$(New-FileHash $PWD/$bin_archive) ?SHA1*${bin_archive}" |
       Out-File -encoding ASCII $bin_archive_hash
 
-  Pop-Location
-}
+    Move-ArchiveToPkg
 
-function Move-ArchiveToRoot() {
-  mv "$install_dir/$bin_archive" "$buildlet_root" -force
-  mv "$install_dir/$bin_archive_hash" "$buildlet_root" -force
+  Pop-Location
 }
 
 function Clean-Build() {

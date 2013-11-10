@@ -102,6 +102,8 @@ usage can be as simple as the following:
         ---> creating binary archive for lua-5.2.2 [64-bit]
         ---> cleaning up
 
+6. Find built artifacts in the `pkg` sub-directory
+
 ## License
 
 3-clause BSD
