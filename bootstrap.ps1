@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-05 18:49:33 -0600
+# Revision: 2013-11-10 14:15:09 -0600
 
 param (
     [parameter(Mandatory=$false,
@@ -38,18 +38,35 @@ switch -regex ($buildlet) {
   }
 }
 
-Write-Debug '---> downloading tools'
-# download build tools
+Write-Debug '---> downloading buildlet library and tools'
+# download buildlet utility library and required tools
+$fetcher = New-Object System.Net.WebClient
+
+if (-not (Test-Path "$PWD\buildlet_utils.ps1")) {
+  Write-Host '---> fetching buildlet library' -foregroundcolor yellow
+  try {
+    $fetcher.DownloadFile('https://raw.github.com/jonforums/buildlets/master/buildlet_utils.ps1',
+                          "$PWD\buildlet_utils.ps1")
+  }
+  catch {
+    throw '[ERROR] unable to fetch required buildlet library'
+  }
+}
+
 if (-not (Test-Path "$tools_root" -type container)) {
   Write-Host "---> creating $tools_root" -foregroundcolor yellow
   New-Item $tools_root -type directory -force | Out-Null
 }
 
-$fetcher = New-Object System.Net.WebClient
 $tools | % {
   if (-not (Test-Path (Join-Path "$tools_root" "$_") -type leaf)) {
     Write-Host "---> downloading tool: $_" -foregroundcolor yellow
-    $fetcher.DownloadFile("${tools_uri}$_", $(Join-Path "$tools_root" "$_"))
+    try {
+      $fetcher.DownloadFile("${tools_uri}$_", $(Join-Path "$tools_root" "$_"))
+    }
+    catch {
+      throw "[ERROR] unable to fetch required build tool $_"
+    }
   }
 }
 
@@ -58,5 +75,10 @@ Write-Debug "---> downloading $buildlet"
 if (($buildlet) -and ($buildlets -contains $buildlet) -and `
     (-not (Test-Path "${buildlet}.ps1" -type leaf))) {
   Write-Host "---> downloading ${buildlet}.ps1" -foregroundcolor yellow
-  $fetcher.DownloadFile("${buildlet_uri}${buildlet}.ps1", $(Join-Path "$PWD" "${buildlet}.ps1"))
+  try {
+    $fetcher.DownloadFile("${buildlet_uri}${buildlet}.ps1", $(Join-Path "$PWD" "${buildlet}.ps1"))
+  }
+  catch {
+    throw "[ERROR] unable to fetch ${buildlet} buildlet"
+  }
 }

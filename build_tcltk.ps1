@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-08 14:13:00 -0600
+# Revision: 2013-11-10 14:18:06 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -25,18 +25,7 @@ $archives = @{tcl = "${repo_root}$($sources.tcl)"; tk = "${repo_root}$($sources.
 $hash_uris = @{tcl = "https://raw.github.com/jonforums/buildlets/master/hashery/tcl.sha1";
                tk = "https://raw.github.com/jonforums/buildlets/master/hashery/tk.sha1"}
 
-# download and source the buildlet library
-if (-not (Test-Path "$PWD\buildlet_utils.ps1")) {
-  Write-Host '---> fetching buildlet library' -foregroundcolor yellow
-  try {
-    $fetcher = New-Object System.Net.WebClient
-    $fetcher.DownloadFile('https://raw.github.com/jonforums/buildlets/master/buildlet_utils.ps1',
-                          "$PWD\buildlet_utils.ps1")
-  }
-  catch {
-    throw '[ERROR] unable to fetch required buildlet library'
-  }
-}
+# source the buildlet library
 . "$PWD\buildlet_utils.ps1"
 
 # download, validate, and extract source archives

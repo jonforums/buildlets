@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-07 17:10:29 -0600
+# Revision: 2013-11-10 14:20:47 -0600
 #
 # TODO:
 #   - extract generics into a downloadable utils helper module
@@ -26,18 +26,7 @@ $repo_root = "http://dl.exactcode.de/oss/${libname}/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
-# download and source the buildlet library
-if (-not (Test-Path "$PWD\buildlet_utils.ps1")) {
-  Write-Host '---> fetching buildlet library' -foregroundcolor yellow
-  try {
-    $fetcher = New-Object System.Net.WebClient
-    $fetcher.DownloadFile('https://raw.github.com/jonforums/buildlets/master/buildlet_utils.ps1',
-                          "$PWD\buildlet_utils.ps1")
-  }
-  catch {
-    throw '[ERROR] unable to fetch required buildlet library'
-  }
-}
+# source the buildlet library
 . "$PWD\buildlet_utils.ps1"
 
 # download source archive
