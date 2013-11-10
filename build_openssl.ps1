@@ -2,10 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-10 14:18:35 -0600
-#
-# TODO:
-#   - extract generics into a downloadable utils helper module
+# Revision: 2013-11-10 14:42:53 -0600
 
 param(
   [parameter(Mandatory=$true,
