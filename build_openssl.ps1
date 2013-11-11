@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-10 15:14:23 -0600
+# Revision: 2013-11-11 18:50:00 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -17,7 +17,7 @@ param(
 
   [parameter(HelpMessage='Path to zlib dev libraries root directory')]
   [alias('with-zlib-dir')]
-  [string] $ZLIBDIR = 'C:/devlibs/zlib/x86/1.2.8'
+  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x86/1.2.8'
 )
 
 $libname = 'openssl'
@@ -52,7 +52,7 @@ Push-Location "${source_dir}"
 
   # activate toolchain
   Activate-Toolchain
-  $env:CPATH = "$ZLIBDIR/include"
+  $env:CPATH = "$ZLIB_DIR/include"
 
   # configure
   Configure-Build {
