@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-10 14:15:09 -0600
+# Revision: 2013-11-13 00:09:32 -0600
 
 param (
     [parameter(Mandatory=$false,
@@ -18,6 +18,7 @@ $tools_uri = 'https://raw.github.com/jonforums/buildlets/master/tools/'
 
 # TODO not DRY enough
 $buildlets = @('build_bzip2'
+               'build_libarchive'
                'build_libffi'
                'build_libiconv'
                'build_liblzma'

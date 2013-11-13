@@ -64,6 +64,7 @@ usage can be as simple as the following:
 
         == Available Buildlets ==
            build_bzip2
+           build_libarchive
            build_libffi
            build_libiconv
            build_liblzma
