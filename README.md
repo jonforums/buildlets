@@ -35,9 +35,9 @@ usage can be as simple as the following:
         ====
           curl --cacert C:\tools\cacert.pem -L -O https://raw.github.com/jonforums/buildlets/master/bootstrap.ps1
 
-        powershell
-        ==========
-          powershell -command "(new-object System.Net.WebClient).DownloadFile('https://raw.github.com/jonforums/buildlets/master/bootstrap.ps1', 'bootstrap.ps1')"
+        powershell via cmd.exe
+        ======================
+          @powershell -NoProfile -ExecutionPolicy unrestricted -Command "(new-object net.webclient).DownloadFile('https://raw.github.com/jonforums/buildlets/master/bootstrap.ps1', 'bootstrap.ps1')"
 
 3. Create a `toolchain.json` file describing the `PATH` requirements of your build toolchains
 
