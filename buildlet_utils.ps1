@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-10 15:13:03 -0600
+# Revision: 2014-01-18 21:39:52 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -240,11 +240,15 @@ function script:Move-ArchiveToPkg() {
 }
 
 function Archive-Build() {
+  param (
+    $name = $source_dir
+  )
+
   Push-Location "$install_dir"
     if ($x64) { $arch = '[64-bit]' }
-    Write-Status "creating binary archive for ${source_dir} ${arch}"
+    Write-Status "creating binary archive for ${name} ${arch}"
     if ($x64) { $arch = 'x64' } else { $arch = 'x86' }
-    $script:bin_archive = "${source_dir}-${arch}-windows-bin.7z"
+    $script:bin_archive = "${name}-${arch}-windows-bin.7z"
     $script:bin_archive_hash = "$bin_archive.sha1"
 
     & "$s7z" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
