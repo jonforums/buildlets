@@ -69,11 +69,13 @@ usage can be as simple as the following:
            build_libiconv
            build_liblzma
            build_lua
+           build_lzo2
            build_minised
            build_openssl
+           build_sqlite
            build_tcltk
+           build_unqlite
            build_zlib
-           ...
 
         PS foo> .\bootstrap.ps1 build_lua
         ---> creating C:\Users\Jon\Downloads\temp\foo\tools
