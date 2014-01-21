@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-08 16:58:21 -0600
+# Revision: 2014-01-20 21:00:31 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -51,8 +51,9 @@ Push-Location "${source_dir}"
   Pop-Location
 
   # activate toolchain
-  Activate-Toolchain
-  $env:CPATH = "$ZLIB_DIR/include"
+  Activate-Toolchain {
+    $env:CPATH = "$ZLIB_DIR/include"
+  }
 
   # configure
   Configure-Build {

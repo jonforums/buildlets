@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-18 21:39:52 -0600
+# Revision: 2014-01-20 20:47:21 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -163,16 +163,14 @@ function Activate-Toolchain() {
 
   if ($x64) { $arch = '[64-bit]' }
   Write-Status "activating toolchain ${arch}"
-  if (-not ($block)) {
-    $new_path = $toolchain.x32.path -join ';'
-    if ($x64) {
-      if (-not $toolchain.x64) {
-        throw '[ERROR] must provide 64-bit toolchain configuration'
-      }
-      $new_path = $toolchain.x64.path -join ';'
+  $new_path = $toolchain.x32.path -join ';'
+  if ($x64) {
+    if (-not $toolchain.x64) {
+      throw '[ERROR] must provide 64-bit toolchain configuration'
     }
-    $env:PATH = "${new_path};${env:PATH}"
+    $new_path = $toolchain.x64.path -join ';'
   }
+  $env:PATH = "${new_path};${env:PATH}"
 
   if ($block) { $block.Invoke() }
 }
