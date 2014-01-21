@@ -2,7 +2,10 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-12 23:44:29 -0600
+# Revision: 2014-01-21 10:57:52 -0600
+
+# TODO - remove libgcc_s_sjlj-1.dll dependency from libarchive-13.dll
+#      - why doesn't x64 build libarchive-13.dll; says bad libbz2.a and liblzma (!?)
 
 param(
   [parameter(Mandatory=$true,
@@ -13,7 +16,23 @@ param(
   [string] $version,
 
   [parameter(HelpMessage='perform a 64-bit build')]
-  [switch] $x64
+  [switch] $x64,
+
+  [parameter(HelpMessage='Path to zlib dev libraries root directory')]
+  [alias('with-zlib-dir')]
+  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x86/1.2.8',
+
+  [parameter(HelpMessage='Path to liblzma dev libraries root directory')]
+  [alias('with-lzma-dir')]
+  [string] $LZMA_DIR = 'C:/devlibs/liblzma/x86/5.0.5',
+
+  [parameter(HelpMessage='Path to libbz2 dev libraries root directory')]
+  [alias('with-bzip2-dir')]
+  [string] $BZIP2_DIR = 'C:/devlibs/libbz2/x86/1.0.6',
+
+  [parameter(HelpMessage='Path to libiconv dev libraries root directory')]
+  [alias('with-iconv-dir')]
+  [string] $ICONV_DIR = 'C:/devlibs/libiconv/x86/1.14'
 )
 
 $libname = 'libarchive'
@@ -39,13 +58,29 @@ Extract-Archive
 Push-Location "${source_dir}"
 
   # activate toolchain
-  Activate-Toolchain
+  Activate-Toolchain {
+    $env:CPATH = "$ZLIB_DIR/include;$LZMA_DIR/include;$BZIP2_DIR/include"
+    $env:LIBRARY_PATH = "$ZLIB_DIR/lib;$LZMA_DIR/lib;$BZIP2_DIR/lib"
+  }
 
   # configure
   Configure-Build {
-    # FIXME config.guess cannot guess system type
-    if ($x64) { $triplets = '--build=x86_64-w64-mingw32' }
-    sh -c "./configure --prefix=${install_dir} ${triplets}" | Out-Null
+    $cfg_args = @('--enable-bsdtar=static'
+                  '--enable-bsdcpio=static'
+                  '--disable-rpath'
+                  '--disable-posix-regex-lib'
+                  '--disable-xattr'
+                  '--disable-acl'
+                  '--without-lzmadec'
+                  '--without-lzo2'
+                  '--without-iconv'
+                  '--without-nettle'
+                  '--without-openssl'
+                  '--without-xml2'
+                  '--without-expat'
+                  "--prefix=${install_dir}")
+
+    sh -c "./configure $($cfg_args -join ' ') ${triplets}" | Out-Null
   }
 
   # build
