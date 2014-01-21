@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-18 01:56:11 -0600
+# Revision: 2014-01-20 21:40:07 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -43,13 +43,6 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
-    # FIXME config.guess cannot guess system type
-    if ($x64) {
-      $triplets = '--build=x86_64-w64-mingw32'
-    } else {
-      $triplets = '--build=i686-w64-mingw32'
-    }
-
     sh -c "./configure --prefix=${install_dir} ${triplets}" | Out-Null
   }
 

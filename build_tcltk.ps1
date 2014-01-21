@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2013-11-10 15:14:41 -0600
+# Revision: 2014-01-20 21:38:29 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -62,8 +62,6 @@ foreach ($source_dir in "tcl${version}", "tk${version}") {
       $cfg_args = "--prefix=$install_dir --enable-threads"
       if ($source_dir -match '^tcl') { $script:tcl_build_dir = "$clean_pwd/win" }
       if ($source_dir -match '^tk') { $cfg_args += " --with-tcl=$tcl_build_dir" }
-      # FIXME config.guess cannot guess system type
-      if ($x64) { $triplets = '--build=x86_64-w64-mingw32' }
 
       sh -c "./configure ${cfg_args} ${triplets}" | Out-Null
     }
