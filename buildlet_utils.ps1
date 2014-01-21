@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-20 23:06:38 -0600
+# Revision: 2014-01-21 09:34:52 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -12,6 +12,10 @@ $env:PATH = 'C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
+
+trap {
+  Clean-Build
+}
 
 # parse and validate user specified toolchain configuration data
 function private:Validate-Toolchain() {
@@ -273,5 +277,8 @@ function Archive-Build() {
 function Clean-Build() {
   Write-Status "cleaning up"
   rm "${source_dir}" -recurse -force
+
+  $env:CPATH = $null
+  $env:LIBRARY_PATH = $null
   $env:PATH = $original_path
 }
