@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-20 21:41:52 -0600
+# Revision: 2014-01-21 00:30:29 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -71,8 +71,7 @@ Push-Location "${source_dir}"
                   '--disable-scripts'
                   '--disable-threads'
                   "CFLAGS='-O2'")
-    # FIXME config.guess cannot guess system type
-    if ($x64) { $triplets = '--build=x86_64-w64-mingw32' }
+
     sh -c "./configure $($cfg_args -join ' ') ${triplets}" | Out-Null
   }
 
