@@ -2,10 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-20 21:45:13 -0600
+# Revision: 2014-01-20 23:06:38 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
+
+# always build using a pristine PATH free of lurking customization monsters
+$env:PATH = 'C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\'
 
 # buildlet execution root directory
 $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
