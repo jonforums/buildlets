@@ -44,16 +44,18 @@ usage can be as simple as the following:
         {
           "x32": {
             "path": [
-              "C:/DevKit-x32-4.7.3/bin",
-              "C:/DevKit-x32-4.7.3/mingw/bin"
-            ]
+              "C:/DevKit-x32-4.8.2/bin",
+              "C:/DevKit-x32-4.8.2/mingw/bin"
+            ],
+            "build": "i686-w64-mingw32"
           },
 
           "x64": {
             "path": [
               "C:/Apps/DevTools/msys/bin",
               "C:/Apps/DevTools/mingw/bin"
-            ]
+            ],
+            "build": "x86_64-w64-mingw32"
           }
         }
 

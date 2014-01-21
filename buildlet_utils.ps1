@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-20 20:47:21 -0600
+# Revision: 2014-01-20 21:08:10 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -24,6 +24,9 @@ function private:Validate-Toolchain() {
   if (-not ($toolchain.x32.path.count -gt 0)) {
     throw '[ERROR] 32-bit toolchain PATH array must contain paths'
   }
+  if (-not ($toolchain.x32.build)) {
+    throw '[ERROR] must provide build triplet for the 32-bit toolchain'
+  }
   if ($toolchain.x64) {
     if (-not ($toolchain.x64.path)) {
       throw '[ERROR] must provide PATH information for the 64-bit toolchain'
@@ -33,6 +36,9 @@ function private:Validate-Toolchain() {
     }
     if (-not ($toolchain.x64.path.count -gt 0)) {
       throw '[ERROR] 32-bit toolchain PATH array must contain paths'
+    }
+    if (-not ($toolchain.x64.build)) {
+      throw '[ERROR] must provide build triplet for the 64-bit toolchain'
     }
   }
 }
