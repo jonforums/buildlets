@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-02-06 21:34:09 -0600
+# Revision: 2014-02-11 20:10:04 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='sqlite version to build (eg - 3.8.3).')]
-  [validateset('3.8.2','3.8.3')]
+             HelpMessage='sqlite version to build (eg - 3.8.3.1).')]
+  [validateset('3.8.2','3.8.3.1')]
   [alias('v')]
   [string] $version,
 
@@ -17,10 +17,11 @@ param(
 )
 
 # munge identifiers due to sqlite's unnecessarily complex naming schemes
-$v = $version.Split('.')
-$sqlite_version = "$([int]$v[0]*1000000 + [int]$v[1]*10000 + [int]$v[2]*100)"
+[int[]] $v = $version.Split('.')
+$sqlite_version = $v[0]*1000000 + $v[1]*10000 + $v[2]*100
+if ($v.Length -eq 4) { $sqlite_version += $v[3] }
 $sqlite_dirs = @{'3.8.2' = '2013';
-                 '3.8.3' = '2014'}
+                 '3.8.3.1' = '2014'}
 
 #http://www.sqlite.org/2013/sqlite-amalgamation-3080200.zip
 $libname = 'sqlite'
