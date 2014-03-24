@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-03-23 22:42:02 -0600
+# Revision: 2014-03-24 13:10:49 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -61,7 +61,6 @@ Push-Location "${source_dir}"
   # build
   New-Build {
     sh -c "make $defines -f win/Makefile.mingw" | Out-Null
-    sh -c "strip -s ${libname}.exe" | Out-Null
   }
 
   # stage
