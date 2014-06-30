@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-06-05 11:40:13 -0600
+# Revision: 2014-06-30 01:22:45 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -53,6 +53,8 @@ Push-Location "${source_dir}"
   # activate toolchain
   Activate-Toolchain {
     $env:CPATH = "$ZLIB_DIR/include"
+    # FIXME more cleanly integrate with existing Configure script invocation
+    $env:CC = 'gcc -static-libgcc'
   }
 
   # configure
