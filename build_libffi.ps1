@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-06-29 11:41:27 -0600
+# Revision: 2014-11-15 16:18:25 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='libffi version to build (eg - 3.1)')]
-  [validateset('3.0.11','3.0.12','3.0.13','3.1')]
+             HelpMessage='libffi version to build (eg - 3.2.1)')]
+  [validateset('3.0.13','3.1','3.2.1')]
   [alias('v')]
   [string] $version,
 
