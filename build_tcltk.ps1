@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-20 21:38:29 -0600
+# Revision: 2015-01-01 16:53:05 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='TclTk version to build (eg - 8.6.1)')]
-  [validateset('8.5.13','8.6.0','8.6.1')]
+             HelpMessage='TclTk version to build (eg - 8.6.3)')]
+  [validateset('8.5.13','8.6.3')]
   [alias('v')]
   [string] $version,
 
