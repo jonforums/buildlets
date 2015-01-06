@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2015-01-03 14:01:54 -0600
+# Revision: 2015-01-06 00:41:42 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
              HelpMessage='ragel version to build (eg - 6.9)')]
-  [validateset('6.9']
+  [validateset('6.9')]
   [alias('v')]
   [string] $version,
 
