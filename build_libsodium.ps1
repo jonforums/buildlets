@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2015-01-08 11:26:37 -0600
+# Revision: 2015-01-08 15:04:16 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -39,7 +39,12 @@ Extract-Archive
 Push-Location "${source_dir}"
 
   # activate toolchain
-  Activate-Toolchain
+  Activate-Toolchain {
+    # Work around libtool's well known behavior of dropping flags like -static-libgcc
+    # that it doesn't currently understand.
+    #   http://www.gnu.org/software/libtool/manual/libtool.html#Stripped-link-flags
+    $env:CC = 'gcc -static-libgcc'
+  }
 
   # configure
   Configure-Build {
