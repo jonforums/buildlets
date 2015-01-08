@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2015-01-06 00:41:42 -0600
+# Revision: 2015-01-08 15:15:19 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -43,7 +43,10 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
-    sh -c "./configure --prefix=${install_dir} LDFLAGS='-static-libgcc -static-libstdc++'" | Out-Null
+    $cfg_args = @("--prefix=${install_dir}",
+                  "LDFLAGS='-static-libgcc -static-libstdc++'")
+
+    sh -c "./configure $($cfg_args -join ' ') ${triplets}" | Out-Null
   }
 
   # build
