@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-03-23 23:50:39 -0600
+# Revision: 2015-01-08 12:11:24 -0600
 
 param (
     [parameter(Mandatory=$false,
@@ -23,10 +23,12 @@ $buildlets = @('build_bzip2'
                'build_libffi'
                'build_libiconv'
                'build_liblzma'
+               'build_libsodium'
                'build_lua'
                'build_lzo2'
                'build_minised'
                'build_openssl'
+               'build_ragel'
                'build_sqlite'
                'build_tcltk'
                'build_unqlite'
