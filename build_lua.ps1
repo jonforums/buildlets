@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-05-08 21:35:09 -0600
+# Revision: 2015-01-14 15:12:34 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='lua version to build (eg - 5.2.3)')]
-  [validateset('5.2.1','5.2.2','5.2.3')]
+             HelpMessage='lua version to build (eg - 5.3.0)')]
+  [validateset('5.2.3','5.3.0')]
   [alias('v')]
   [string] $version,
 
