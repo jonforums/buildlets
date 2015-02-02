@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2015-01-08 15:04:16 -0600
+# Revision: 2015-02-02 17:05:21 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='libsodium version to build (eg - 1.0.1)')]
-  [validateset('1.0.1')]
+             HelpMessage='libsodium version to build (eg - 1.0.2)')]
+  [validateset('1.0.2')]
   [alias('v')]
   [string] $version,
 
