@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2015-06-20 19:23:04 -0600
+# Revision: 2016-03-05 10:42:42 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='liblzma version to build (eg - 5.2.1).')]
-  [validateset('5.2.0','5.2.1')]
+             HelpMessage='liblzma version to build (eg - 5.2.2).')]
+  [validateset('5.2.2')]
   [alias('v')]
   [string] $version,
 
