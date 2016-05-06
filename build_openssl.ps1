@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-01-28 15:59:08 -0600
+# Revision: 2016-05-03 13:46:43 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='OpenSSL version to build (eg - 1.0.2f).')]
-  [validateset('1.0.1r','1.0.2f')]
+             HelpMessage='OpenSSL version to build (eg - 1.0.2h).')]
+  [validateset('1.0.1t','1.0.2h')]
   [alias('v')]
   [string] $version,
 
@@ -45,10 +45,10 @@ Extract-Archive
 Push-Location "${source_dir}"
 
   # patch
-  Write-Status "patching ${source_dir}"
-  Push-Location test
-    rm md2test.c,rc5test.c,jpaketest.c
-  Pop-Location
+  #Write-Status "patching ${source_dir}"
+  #Push-Location test
+  #rm md2test.c,rc5test.c,jpaketest.c
+  #Pop-Location
 
   # activate toolchain
   Activate-Toolchain {
