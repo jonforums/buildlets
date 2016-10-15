@@ -7,8 +7,8 @@
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='sqlite version to build (eg - 3.14.2).')]
-  [validateset('3.13.0','3.14.2')]
+             HelpMessage='sqlite version to build (eg - 3.15.0).')]
+  [validateset('3.14.2','3.15.0')]
   [alias('v')]
   [string] $version,
 
@@ -20,8 +20,8 @@ param(
 [int[]] $v = $version.Split('.')
 $sqlite_version = $v[0]*1000000 + $v[1]*10000 + $v[2]*100
 if ($v.Length -eq 4) { $sqlite_version += $v[3] }
-$sqlite_dirs = @{'3.13.0' = '2016'
-                 '3.14.2' = '2016'}
+$sqlite_dirs = @{'3.14.2' = '2016'
+                 '3.15.0' = '2016'}
 
 $libname = 'sqlite'
 $source = "${libname}-amalgamation-${sqlite_version}.zip"
