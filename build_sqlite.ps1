@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-09-14 12:50:34 -0600
+# Revision: 2016-10-14 21:51:01 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -59,10 +59,15 @@ Push-Location "${source_dir}"
                  '-DSQLITE_ENABLE_JSON1'
                  '-DSQLITE_WIN32_MALLOC'
                  '-DSQLITE_ENABLE_FTS5'
+                 '-DSQLITE_SECURE_DELETE'
                  '-DSQLITE_ENABLE_RTREE'
                  '-DSQLITE_THREADSAFE=1'
                  '-DSQLITE_MAX_EXPR_DEPTH=0'
-                 '-DSQLITE_ENABLE_COLUMN_METADATA=1')
+                 '-DSQLITE_DEFAULT_MEMSTATUS=0'
+                 '-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1'
+                 '-DSQLITE_LIKE_DOESNT_MATCH_BLOBS'
+                 '-DSQLITE_ENABLE_EXPLAIN_COMMENTS'
+                 '-DSQLITE_ENABLE_COLUMN_METADATA')
     $script:cflags = "-g $($defines -join ' ') -Wall -Wextra -O2"
   }
 
