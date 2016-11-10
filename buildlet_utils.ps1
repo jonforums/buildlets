@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-21 09:34:52 -0600
+# Revision: 2016-11-10 11:08:51 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -164,7 +164,7 @@ function Extract-CustomArchive {
   if ($block) {
     $block.Invoke()
   } else {
-    (& "$s7z" "x" $source -o"${source_dir}") | Out-Null
+    (& "$s7z" "x" "-y" $source -o"${source_dir}") | Out-Null
   }
 }
 
