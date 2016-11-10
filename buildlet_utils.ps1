@@ -151,7 +151,7 @@ function Validate-Archive() {
 function Extract-Archive() {
   Write-Status "extracting $source"
   $tar_file = "$($source.Substring(0, $source.LastIndexOf('-')))*.tar"
-  (& "$s7z" "x" $source) -and (& "$s7z" "x" $tar_file) -and (rm $tar_file) | Out-Null
+  (& "$s7z" "x" "-y" $source) -and (& "$s7z" "x" "-y" $tar_file) -and (rm $tar_file) | Out-Null
 }
 
 function Extract-CustomArchive {
