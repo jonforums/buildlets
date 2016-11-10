@@ -275,8 +275,16 @@ function Archive-Build() {
 }
 
 function Clean-Build() {
+  param (
+    [System.Management.Automation.ScriptBlock] $block
+  )
+
   Write-Status "cleaning up"
-  rm "${source_dir}" -recurse -force
+  if ($block) {
+    $block.Invoke()
+  } else {
+    rm "${source_dir}" -recurse -force
+  }
 
   $env:CPATH = $null
   $env:LIBRARY_PATH = $null
