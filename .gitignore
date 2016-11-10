@@ -1,4 +1,5 @@
 pkg/
+toolchain.json
 *.gz
 *.bz2
 *.7z
