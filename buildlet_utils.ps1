@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-11-10 11:08:51 -0600
+# Revision: 2016-11-10 11:56:34 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -188,6 +188,26 @@ function Activate-Toolchain() {
   $env:PATH = "${new_path};${env:PATH}"
 
   if ($block) { $block.Invoke() }
+}
+
+# TODO alllow custom status message
+function Apply-Patches() {
+  param (
+    [System.Management.Automation.ScriptBlock] $block
+  )
+
+  if ($x64) { $arch = '[64-bit]' }
+  Write-Status "patching ${source_dir} ${arch}"
+
+  if ($block) {
+    $block.Invoke()
+  } else {
+    Get-ChildItem "${buildlet_root}/patches/${libname}" | Sort-Object | %{
+      $patch = "${buildlet_root}/patches/${libname}/$_"
+      Write-Status "   applying $_"
+      patch -p1 -i "${patch}" | Out-Null
+    }
+  }
 }
 
 # TODO allow custom status message
