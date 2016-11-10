@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2015-01-01 16:53:05 -0600
+# Revision: 2016-11-09 20:49:42 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='TclTk version to build (eg - 8.6.3)')]
-  [validateset('8.5.13','8.6.3')]
+             HelpMessage='TclTk version to build (eg - 8.6.6)')]
+  [validateset('8.5.19','8.6.6')]
   [alias('v')]
   [string] $version,
 
@@ -81,5 +81,6 @@ foreach ($source_dir in "tcl${version}", "tk${version}") {
 }
 
 # cleanup
-Write-Status "cleaning up"
-foreach ($dir in "tcl${version}", "tk${version}") { rm $dir -recurse -force }
+Clean-Build {
+  foreach ($dir in "tcl${version}", "tk${version}") { rm $dir -recurse -force }
+}
