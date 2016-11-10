@@ -66,12 +66,14 @@ usage can be as simple as the following:
 
         == Available Buildlets ==
            build_bzip2
+           build_discount
            build_fossil
            build_libarchive
            build_libffi
            build_libiconv
            build_liblzma
            build_libsodium
+           build_libyaml
            build_lua
            build_lzo2
            build_minised
