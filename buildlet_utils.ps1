@@ -287,6 +287,9 @@ function Clean-Build() {
   }
 
   $env:CPATH = $null
+  $env:CC = $null
+  $env:CXX = $null
+  $env:CFLAGS = $null
   $env:LIBRARY_PATH = $null
   $env:PATH = $original_path
 }
