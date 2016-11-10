@@ -44,8 +44,8 @@ usage can be as simple as the following:
         {
           "x32": {
             "path": [
-              "C:/DevKit-x32-4.8.2/bin",
-              "C:/DevKit-x32-4.8.2/mingw/bin"
+              "C:/DevKit-x32-6.2.0/bin",
+              "C:/DevKit-x32-6.2.0/mingw/bin"
             ],
             "build": "i686-w64-mingw32"
           },
