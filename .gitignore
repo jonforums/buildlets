@@ -1,5 +1,6 @@
 pkg/
 toolchain.json
+pax_global_header
 *.gz
 *.bz2
 *.7z
