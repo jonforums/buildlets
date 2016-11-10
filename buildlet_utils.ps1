@@ -282,3 +282,11 @@ function Clean-Build() {
   $env:LIBRARY_PATH = $null
   $env:PATH = $original_path
 }
+
+# Returns whether or not the current user has administrative privileges
+function IsAdministrator
+{
+    $Identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+    $Principal = New-Object System.Security.Principal.WindowsPrincipal($Identity)
+    $Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+}
