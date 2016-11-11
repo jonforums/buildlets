@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-11-10 21:29:21 -0600
+# Revision: 2016-11-10 23:27:17 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -49,7 +49,7 @@ Push-Location "${source_dir}"
   # configure
   Configure-Build {
     # TODO make libwinpthread a static dependency like libgcc
-    sh -c "./configure --prefix=${install_dir} ${triplets}" | Out-Null
+    sh -c "./configure --prefix=${install_dir} ${triplets} --without-pthreads" | Out-Null
   }
 
   # build
