@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2015-06-24 18:03:15 -0600
+# Revision: 2016-11-10 21:29:21 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='libsodium version to build (eg - 1.0.3)')]
-  [validateset('1.0.3')]
+             HelpMessage='libsodium version to build (eg - 1.0.11)')]
+  [validateset('1.0.11')]
   [alias('v')]
   [string] $version,
 
@@ -48,6 +48,7 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
+    # TODO make libwinpthread a static dependency like libgcc
     sh -c "./configure --prefix=${install_dir} ${triplets}" | Out-Null
   }
 
