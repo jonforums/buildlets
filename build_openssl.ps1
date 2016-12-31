@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-12-27 09:28:10 -0600
+# Revision: 2016-12-31 00:41:18 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -59,7 +59,7 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
-    perl Configure $mingw_flavor zlib-dynamic no-shared --prefix="$install_dir" | Out-Null
+    perl Configure $mingw_flavor zlib-dynamic shared --prefix="$install_dir" | Out-Null
   }
 
   # build
