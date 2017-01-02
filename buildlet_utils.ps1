@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-11-10 11:56:34 -0600
+# Revision: 2017-01-01 20:56:14 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -19,19 +19,19 @@ trap {
 
 # parse and validate user specified toolchain configuration data
 function private:Validate-Toolchain() {
-  if (-not ($toolchain.x32)) {
+  if (-not ($toolchain.x86)) {
     throw '[ERROR] must provide a 32-bit toolchain configuration'
   }
-  if (-not ($toolchain.x32.path)) {
+  if (-not ($toolchain.x86.path)) {
     throw '[ERROR] must provide PATH information for the 32-bit toolchain'
   }
-  if ($toolchain.x32.path -isnot [System.Array]) {
+  if ($toolchain.x86.path -isnot [System.Array]) {
     throw '[ERROR] 32-bit toolchain PATH info must be in an array'
   }
-  if (-not ($toolchain.x32.path.count -gt 0)) {
+  if (-not ($toolchain.x86.path.count -gt 0)) {
     throw '[ERROR] 32-bit toolchain PATH array must contain paths'
   }
-  if (-not ($toolchain.x32.build)) {
+  if (-not ($toolchain.x86.build)) {
     throw '[ERROR] must provide build triplet for the 32-bit toolchain'
   }
   if ($toolchain.x64) {
@@ -176,8 +176,8 @@ function Activate-Toolchain() {
 
   if ($x64) { $arch = '[64-bit]' }
   Write-Status "activating toolchain ${arch}"
-  $new_path = $toolchain.x32.path -join ';'
-  $script:triplets = "--build=$($toolchain.x32.build)"
+  $new_path = $toolchain.x86.path -join ';'
+  $script:triplets = "--build=$($toolchain.x86.build)"
   if ($x64) {
     if (-not $toolchain.x64) {
       throw '[ERROR] must provide 64-bit toolchain configuration'

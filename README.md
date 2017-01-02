@@ -42,7 +42,7 @@ usage can be as simple as the following:
 3. Create a `toolchain.json` file describing the `PATH` requirements of your build toolchains
 
         {
-          "x32": {
+          "x86": {
             "path": [
               "C:/DevKit-x32-6.2.0/bin",
               "C:/DevKit-x32-6.2.0/mingw/bin"
