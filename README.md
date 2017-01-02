@@ -1,7 +1,7 @@
 ## Buildlets
 
 An eclectic collection of single file, minimal dependency, PowerShell-based
-build recipes for creating libraries and executables on mingw/minw-w64
+build recipes for creating libraries and executables on mingw/mingw-w64
 Windows systems.
 
 In contrast with other well known port-style systems, buildlets enable one to
@@ -19,9 +19,9 @@ minimalism and modular reusability.
 * PowerShell 3.0+
 * .NET Framework v3.5+
 * Live internet connection
-* MinGW or mingw-w64 based toolchain with MSYS, Autotools, and Perl superpowers.
-  Currently, buildlets requires that you create a `toolchain.json` file describing
-  the relevant `PATH` to your 32-bit and 64-bit msys/mingw-based toolchains.
+* MinGW or mingw-w64 based toolchain with MSYS2, Autotools, patch, and Perl superpowers.
+* A `toolchain.json` file with `PATH` data to your 32-bit and 64-bit msys/mingw-based
+  toolchains.
 
 ## Basic Usage
 
