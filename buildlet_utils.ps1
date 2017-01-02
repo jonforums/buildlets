@@ -120,19 +120,27 @@ function Fetch-Archive() {
 }
 
 function Validate-Archive() {
+  Write-Status "validating $source"
+
+  if (-not (Test-Path "$PWD\$source")) {
+    throw "[ERROR] no downloaded $source file to validate"
+  }
+
+  $fetcher = New-Object System.Net.WebClient
+  $hash = ConvertFrom-StringData $fetcher.DownloadString($hash_uri)
+  if ($hash.Count -eq 0) {
+    Write-Status "unable to download checksum for $source; continuing..."
+  }
+
+  switch ($hash_uri.SubString($hash_uri.LastIndexOf('.')+1)) {
+    'md5' { $hasher = New-Object System.Security.Cryptography.MD5Cng; break }
+    'sha1' { $hasher = New-Object System.Security.Cryptography.SHA1Cng; break }
+    'sha256' { $hasher = New-Object System.Security.Cryptography.SHA256Cng; break }
+    'sha512' { $hasher = New-Object System.Security.Cryptography.SHA512Cng; break }
+    default { throw }
+  }
+
   try {
-    Write-Status "validating $source"
-    $fetcher = New-Object System.Net.WebClient
-    $hash = ConvertFrom-StringData $fetcher.DownloadString($hash_uri)
-
-    switch ($hash_uri.SubString($hash_uri.LastIndexOf('.')+1)) {
-      'md5' { $hasher = New-Object System.Security.Cryptography.MD5Cng; break }
-      'sha1' { $hasher = New-Object System.Security.Cryptography.SHA1Cng; break }
-      'sha256' { $hasher = New-Object System.Security.Cryptography.SHA256Cng; break }
-      'sha512' { $hasher = New-Object System.Security.Cryptography.SHA512Cng; break }
-      default { throw }
-    }
-
     $fs = New-Object System.IO.FileStream "$PWD\$source", 'Open', 'Read'
     $test_hash = [BitConverter]::ToString($hasher.ComputeHash($fs)).Replace('-','').ToLower()
   }
