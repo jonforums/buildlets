@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-01-06 01:50:23 -0600
+# Revision: 2017-01-06 01:54:02 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -126,10 +126,15 @@ function Validate-Archive() {
     throw "[ERROR] no downloaded $source file to validate"
   }
 
-  $fetcher = New-Object System.Net.WebClient
-  $hash = ConvertFrom-StringData $fetcher.DownloadString($hash_uri)
+  try {
+    $fetcher = New-Object System.Net.WebClient
+    $hash = ConvertFrom-StringData $fetcher.DownloadString($hash_uri)
+  }
+  catch {}
+
   if ($hash.Count -eq 0) {
-    Write-Status "unable to download checksum for $source; continuing..."
+    Write-Status "   no checksum for $source...continuing" -color 'red'
+    return
   }
 
   switch ($hash_uri.SubString($hash_uri.LastIndexOf('.')+1)) {
@@ -148,7 +153,7 @@ function Validate-Archive() {
     throw "[ERROR] unable to validate $source"
   }
   finally {
-    $fs.Close()
+    if ($fs) { $fs.Close() }
   }
 
   if ($test_hash -ne $hash[$version].ToLower()) {
@@ -266,7 +271,7 @@ function script:New-FileHash($path) {
     throw "[ERROR] unable to hash $path"
   }
   finally {
-    $fs.Close()
+    if ($fs) { $fs.Close() }
   }
 }
 
