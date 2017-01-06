@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-01-01 20:56:14 -0600
+# Revision: 2017-01-06 01:50:23 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -268,6 +268,18 @@ function script:New-FileHash($path) {
   finally {
     $fs.Close()
   }
+}
+
+# TODO allow custom status message
+function Test-Build() {
+  param (
+    [System.Management.Automation.ScriptBlock] $block
+  )
+
+  if ($x64) { $arch = '[64-bit]' }
+  Write-Status "testing ${source_dir} ${arch}"
+
+  if ($block) { $block.Invoke() }
 }
 
 function script:Move-ArchiveToPkg() {
