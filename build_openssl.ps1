@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-12-31 00:41:18 -0600
+# Revision: 2017-01-26 22:44:40 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -43,12 +43,6 @@ Extract-Archive
 
 # patch, configure, build, archive
 Push-Location "${source_dir}"
-
-  # patch
-  #Write-Status "patching ${source_dir}"
-  #Push-Location test
-  #rm md2test.c,rc5test.c,jpaketest.c
-  #Pop-Location
 
   # activate toolchain
   Activate-Toolchain {
