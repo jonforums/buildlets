@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-01-26 22:44:40 -0600
+# Revision: 2017-01-26 23:07:18 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -17,7 +17,7 @@ param(
 
   [parameter(HelpMessage='Path to zlib dev libraries root directory')]
   [alias('with-zlib-dir')]
-  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x86/1.2.8'
+  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x86/1.2.11'
 )
 
 $libname = 'openssl'
