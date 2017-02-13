@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-01-06 01:54:02 -0600
+# Revision: 2017-02-13 14:02:00 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -15,6 +15,7 @@ $buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
 
 trap {
   Clean-Build
+  break
 }
 
 # parse and validate user specified toolchain configuration data
