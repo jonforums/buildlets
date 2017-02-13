@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-03-05 10:42:42 -0600
+# Revision: 2017-02-12 18:40:13 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='liblzma version to build (eg - 5.2.2).')]
-  [validateset('5.2.2')]
+             HelpMessage='liblzma version to build (eg - 5.2.3).')]
+  [validateset('5.2.3')]
   [alias('v')]
   [string] $version,
 
@@ -17,7 +17,7 @@ param(
 )
 
 $libname = 'xz'
-$source = "${libname}-${version}.tar.bz2"
+$source = "${libname}-${version}.tar.xz"
 $source_dir = "${libname}-${version}"
 $repo_root = 'http://tukaani.org/xz/'
 $archive = "${repo_root}${source}"
