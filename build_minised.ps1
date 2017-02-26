@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-11-21 14:47:21 -0600
+# Revision: 2017-02-26 10:44:02 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
              HelpMessage='minised version to build (eg - 1.15)')]
-  [validateset('1.14','1.15')]
+  [validateset('1.15')]
   [alias('v')]
   [string] $version,
 
@@ -52,8 +52,10 @@ Push-Location "${source_dir}"
   }
 
   # install
-  strip -s minised.exe | Out-Null
-  cp minised.exe, README, LICENSE -destination "$install_dir" | Out-Null
+  Stage-Build {
+    strip -s minised.exe | Out-Null
+    cp minised.exe, README, LICENSE -destination "$install_dir" | Out-Null
+  }
 
   # archive
   Archive-Build
