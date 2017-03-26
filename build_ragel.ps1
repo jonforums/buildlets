@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2015-01-08 15:15:19 -0600
+# Revision: 2017-03-26 00:44:02 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='ragel version to build (eg - 6.9)')]
-  [validateset('6.9')]
+             HelpMessage='ragel version to build (eg - 6.10)')]
+  [validateset('6.10')]
   [alias('v')]
   [string] $version,
 
@@ -54,8 +54,10 @@ Push-Location "${source_dir}"
     sh -c "make" | Out-Null
   }
 
-  # install
-  sh -c "make install-strip" | Out-Null
+  # staging
+  Stage-Build {
+    sh -c "make install-strip" | Out-Null
+  }
 
   # archive
   Archive-Build
