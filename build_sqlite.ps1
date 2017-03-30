@@ -56,7 +56,6 @@ Push-Location "${source_dir}"
                  '-DNDEBUG'
                  '-D_WINDOWS'
                  '-DNO_TCL'
-                 '-DSQLITE_OMIT_DEPRECATED'
                  '-DSQLITE_ENABLE_JSON1'
                  '-DSQLITE_WIN32_MALLOC'
                  '-DSQLITE_ENABLE_FTS5'
