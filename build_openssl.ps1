@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-11-04 01:14:56 -0600
+# Revision: 2018-03-30 09:11:10 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='OpenSSL version to build (eg - 1.1.0g).')]
-  [validateset('1.0.2m','1.1.0g')]
+             HelpMessage='OpenSSL version to build (eg - 1.1.0h).')]
+  [validateset('1.0.2o','1.1.0h')]
   [alias('v')]
   [string] $version,
 
@@ -53,6 +53,7 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
+    # TODO add --openssldir option?
     perl Configure $mingw_flavor zlib-dynamic shared --prefix="$install_dir" | Out-Null
   }
 
