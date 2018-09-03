@@ -26,7 +26,7 @@ $sqlite_dirs = @{'3.23.1' = '2018'
 $libname = 'sqlite'
 $source = "${libname}-amalgamation-${sqlite_version}.zip"
 $source_dir = "${libname}-amalgamation-${sqlite_version}"
-$repo_root = "http://www.sqlite.org/$($sqlite_dirs[$version])/"
+$repo_root = "https://www.sqlite.org/$($sqlite_dirs[$version])/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
