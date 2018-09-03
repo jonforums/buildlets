@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-02-13 14:02:00 -0600
+# Revision: 2018-09-03 17:09:05 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -83,10 +83,14 @@ function Fetch-Archive() {
 
     switch -regex ($uri.Scheme.ToLower()) {
       '^(?:http|https)' {
-        Import-Module BitsTransfer
-        Start-BitsTransfer $archive "$PWD\$source"
+        try {
+          (New-Object System.Net.WebClient).DownloadFile($archive, "$PWD\$source")
+        } catch {
+          throw "[ERROR] unable to fetch $archive"
+        }
         break
       }
+      # TODO no need for switch on ftp vs. http[s] download method if using WebClient?
       '^ftp$' {
         try {
           [System.Net.FtpWebRequest]$request = [System.Net.WebRequest]::Create($archive)
@@ -139,10 +143,10 @@ function Validate-Archive() {
   }
 
   switch ($hash_uri.SubString($hash_uri.LastIndexOf('.')+1)) {
-    'md5' { $hasher = New-Object System.Security.Cryptography.MD5Cng; break }
-    'sha1' { $hasher = New-Object System.Security.Cryptography.SHA1Cng; break }
-    'sha256' { $hasher = New-Object System.Security.Cryptography.SHA256Cng; break }
-    'sha512' { $hasher = New-Object System.Security.Cryptography.SHA512Cng; break }
+    'md5' { $hasher = New-Object System.Security.Cryptography.MD5CryptoServiceProvider; break }
+    'sha1' { $hasher = New-Object System.Security.Cryptography.SHA1CryptoServiceProvider; break }
+    'sha256' { $hasher = New-Object System.Security.Cryptography.SHA256CryptoServiceProvider; break }
+    'sha512' { $hasher = New-Object System.Security.Cryptography.SHA512CryptoServiceProvider; break }
     default { throw }
   }
 
@@ -263,7 +267,7 @@ function Stage-Build() {
 
 function script:New-FileHash($path) {
   try {
-    $hasher = New-Object System.Security.Cryptography.SHA1Cng
+    $hasher = New-Object System.Security.Cryptography.SHA1CryptoServiceProvider
 
     $fs = New-Object System.IO.FileStream $path, 'Open', 'Read'
     return [BitConverter]::ToString($hasher.ComputeHash($fs)).Replace('-','').ToLower()
