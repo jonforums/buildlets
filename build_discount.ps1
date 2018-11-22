@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-01-28 10:05:34 -0600
+# Revision: 2018-11-22 11:21:30 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='Discount version to build (eg - 2.2.2)')]
-  [validateset('2.2.2')]
+             HelpMessage='Discount version to build (eg - 2.2.4)')]
+  [validateset('2.2.4')]
   [alias('v')]
   [string] $version,
 
@@ -16,11 +16,12 @@ param(
   [switch] $x64
 )
 
+# project documentation: http://www.pell.portland.or.us/~orc/Code/discount/
 $libname = 'discount'
 $source = "${libname}-${version}.tar.gz"
 $source_dir = "${libname}-${version}"
 $repo_root = "https://github.com/Orc/${libname}/archive/"
-$archive = "${repo_root}${version}.tar.gz"
+$archive = "${repo_root}v${version}.tar.gz"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
 # source the buildlet library
