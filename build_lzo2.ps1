@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2014-01-20 21:40:07 -0600
+# Revision: 2018-11-22 23:53:17 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='lzo2 version to build (eg - 2.06)')]
-  [validateset('2.06')]
+             HelpMessage='lzo2 version to build (eg - 2.10)')]
+  [validateset('2.10')]
   [alias('v')]
   [string] $version,
 
