@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2018-11-22 11:21:30 -0600
+# Revision: 2019-04-18 21:25:02 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='Discount version to build (eg - 2.2.4)')]
-  [validateset('2.2.4')]
+             HelpMessage='Discount version to build (eg - 2.2.5)')]
+  [validateset('2.2.5')]
   [alias('v')]
   [string] $version,
 
