@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2019-04-17 13:38:13 -0600
+# Revision: 2019-04-22 07:27:24 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -56,18 +56,21 @@ Push-Location "${source_dir}"
                  '-DNDEBUG'
                  '-D_WINDOWS'
                  '-DNO_TCL'
+                 '-DSQLITE_OMIT_DEPRECATED'
                  '-DSQLITE_ENABLE_JSON1'
                  '-DSQLITE_WIN32_MALLOC'
                  '-DSQLITE_ENABLE_FTS5'
                  '-DSQLITE_SECURE_DELETE'
                  '-DSQLITE_ENABLE_RTREE'
-                 '-DSQLITE_THREADSAFE=1'
+                 '-DSQLITE_ENABLE_GEOPOLY'
+                 '-DSQLITE_THREADSAFE=0'
                  '-DSQLITE_MAX_EXPR_DEPTH=0'
                  '-DSQLITE_DEFAULT_MEMSTATUS=0'
                  '-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1'
                  '-DSQLITE_LIKE_DOESNT_MATCH_BLOBS'
                  '-DSQLITE_ENABLE_EXPLAIN_COMMENTS'
-                 '-DSQLITE_ENABLE_COLUMN_METADATA')
+                 '-DSQLITE_ENABLE_COLUMN_METADATA'
+                 '-DSQLITE_ENABLE_UNKNOWN_SQL_FUNCTION')
     $script:cflags = "-g $($defines -join ' ') -Wall -Wextra -O2"
   }
 
