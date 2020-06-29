@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2018-07-21 11:26:14 -0600
+# Revision: 2020-06-29 18:31:11 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='lua version to build (eg - 5.3.5)')]
-  [validateset('5.3.5')]
+             HelpMessage='lua version to build (eg - 5.4.0)')]
+  [validateset('5.4.0')]
   [alias('v')]
   [string] $version,
 
@@ -19,7 +19,7 @@ param(
 $libname = 'lua'
 $source = "${libname}-${version}.tar.gz"
 $source_dir = "${libname}-${version}"
-$repo_root = "http://www.lua.org/ftp/"
+$repo_root = "https://www.lua.org/ftp/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
