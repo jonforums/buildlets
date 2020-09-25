@@ -2,22 +2,25 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-04-22 23:38:54 -0600
+# Revision: 2020-09-24 14:47:47 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='OpenSSL version to build (eg - 1.1.1g).')]
-  [validateset('1.1.1g')]
+             HelpMessage='OpenSSL version to build (eg - 1.1.1h).')]
+  [validateset('1.1.1h')]
   [alias('v')]
   [string] $version,
 
-  [parameter(HelpMessage='perform a 64-bit build')]
+  [parameter(HelpMessage='Perform a 64-bit build')]
   [switch] $x64,
+
+  [parameter(HelpMessage='Create a static CLI exe')]
+  [switch] $cli,
 
   [parameter(HelpMessage='Path to zlib dev libraries root directory')]
   [alias('with-zlib-dir')]
-  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x86/1.2.11'
+  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x64/1.2.11'
 )
 
 $libname = 'openssl'
@@ -53,8 +56,13 @@ Push-Location "${source_dir}"
 
   # configure
   Configure-Build {
-    # use zlib and no-shared for self-contained binary
-    perl Configure $mingw_flavor zlib-dynamic shared --prefix="$install_dir" | Out-Null
+    if ($cli) {
+      $env:CFLAGS = "-static"
+      # use zlib and no-shared for self-contained binary
+      perl Configure $mingw_flavor zlib no-shared --prefix="$install_dir" --openssldir='C:/tools/ssl' | Out-Null
+    } else {
+      perl Configure $mingw_flavor zlib-dynamic shared --prefix="$install_dir" | Out-Null
+    }
   }
 
   # build
