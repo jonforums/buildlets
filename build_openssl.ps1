@@ -20,7 +20,7 @@ param(
 
   [parameter(HelpMessage='Path to zlib dev libraries root directory')]
   [alias('with-zlib-dir')]
-  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x64/1.2.11'
+  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x86/1.2.11'
 )
 
 $libname = 'openssl'
