@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2018-09-03 17:09:05 -0600
+# Revision: 2020-09-26 10:12:06 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -267,7 +267,7 @@ function Stage-Build() {
 
 function script:New-FileHash($path) {
   try {
-    $hasher = New-Object System.Security.Cryptography.SHA1CryptoServiceProvider
+    $hasher = New-Object System.Security.Cryptography.SHA256CryptoServiceProvider
 
     $fs = New-Object System.IO.FileStream $path, 'Open', 'Read'
     return [BitConverter]::ToString($hasher.ComputeHash($fs)).Replace('-','').ToLower()
@@ -312,11 +312,11 @@ function Archive-Build() {
     Write-Status "creating binary archive for ${name} ${arch}"
     if ($x64) { $arch = 'x64' } else { $arch = 'x86' }
     $script:bin_archive = "${name}-${arch}-windows-bin.7z"
-    $script:bin_archive_hash = "$bin_archive.sha1"
+    $script:bin_archive_hash = "$bin_archive.sha256"
 
     & "$s7z" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
 
-    "$(New-FileHash $PWD/$bin_archive) ?SHA1*${bin_archive}" |
+    "$(New-FileHash $PWD/$bin_archive) *${bin_archive}" |
       Out-File -encoding ASCII $bin_archive_hash
 
     Move-ArchiveToPkg
