@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-26 14:47:47 -0600
+# Revision: 2020-09-27 13:21:12 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -59,8 +59,8 @@ Push-Location "${build_src_dir}"
   # configure
   Configure-Build {
     if ($cli) {
+      Write-Status 'building openssl-cli.exe static CLI executable'
       $env:CFLAGS = "-static"
-      # use zlib and no-shared for self-contained binary
       perl Configure $mingw_flavor zlib no-shared --prefix="$install_dir" --openssldir='C:/tools/ssl' | Out-Null
     } else {
       perl Configure $mingw_flavor zlib-dynamic shared --prefix="$install_dir" | Out-Null
@@ -75,8 +75,22 @@ Push-Location "${build_src_dir}"
   # install
   sh -c "make install_sw" | Out-Null
 
+  # stage
+  Stage-Build {
+    if ($cli) {
+      mv "$install_dir/bin/${libname}.exe" "$install_dir/${libname}-cli.exe" | Out-Null
+      strip --strip-unneeded "$install_dir/${libname}-cli.exe" | Out-Null
+
+      rm "$install_dir/bin", "$install_dir/include", "$install_dir/lib" -recurse -force | Out-Null
+    }
+  }
+
   # archive
-  Archive-Build
+  if ($cli) {
+    Archive-Build -variant 'static-cli'
+  } else {
+    Archive-Build
+  }
 
 Pop-Location
 
