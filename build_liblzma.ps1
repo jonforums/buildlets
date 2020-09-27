@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2018-11-23 00:09:17 -0600
+# Revision: 2020-09-26 17:03:20 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='liblzma version to build (eg - 5.2.4).')]
-  [validateset('5.2.4')]
+             HelpMessage='liblzma version to build (eg - 5.2.5).')]
+  [validateset('5.2.5')]
   [alias('v')]
   [string] $version,
 
@@ -18,8 +18,8 @@ param(
 
 $libname = 'xz'
 $source = "${libname}-${version}.tar.xz"
-$source_dir = "${libname}-${version}"
-$repo_root = 'http://tukaani.org/xz/'
+$build_name = "${libname}-${version}"
+$repo_root = 'https://tukaani.org/xz/'
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
@@ -36,7 +36,7 @@ Validate-Archive
 Extract-Archive
 
 # patch, configure, build, archive
-Push-Location "${source_dir}"
+Push-Location "${build_src_dir}"
 
   # activate toolchain
   Activate-Toolchain

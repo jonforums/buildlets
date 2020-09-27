@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2018-11-22 23:53:17 -0600
+# Revision: 2020-09-26 18:01:27 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -18,8 +18,8 @@ param(
 
 $libname = 'lzo'
 $source = "${libname}-${version}.tar.gz"
-$source_dir = "${libname}-${version}"
-$repo_root = "http://www.oberhumer.com/opensource/lzo/download/"
+$build_name = "${libname}-${version}"
+$repo_root = "https://www.oberhumer.com/opensource/lzo/download/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
@@ -36,7 +36,7 @@ Validate-Archive
 Extract-Archive
 
 # patch, configure, build, archive
-Push-Location "${source_dir}"
+Push-Location "${build_src_dir}"
 
   # activate toolchain
   Activate-Toolchain

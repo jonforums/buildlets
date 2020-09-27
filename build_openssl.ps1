@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-24 14:47:47 -0600
+# Revision: 2020-09-26 14:47:47 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -25,8 +25,8 @@ param(
 
 $libname = 'openssl'
 $source = "${libname}-${version}.tar.gz"
-$source_dir = "${libname}-${version}"
-$repo_root = 'http://www.openssl.org/source/'
+$build_name = "${libname}-${version}"
+$repo_root = 'https://www.openssl.org/source/'
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
@@ -45,10 +45,12 @@ Validate-Archive
 Extract-Archive
 
 # patch, configure, build, archive
-Push-Location "${source_dir}"
+Push-Location "${build_src_dir}"
 
   # activate toolchain
   Activate-Toolchain {
+    $ZLIB_DIR = $ZLIB_DIR.Replace('\', '/')
+
     $env:CPATH = "$ZLIB_DIR/include"
     # FIXME more cleanly integrate with existing Configure script invocation
     $env:CC = 'gcc -static-libgcc'

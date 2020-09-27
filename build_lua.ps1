@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-06-29 18:31:11 -0600
+# Revision: 2020-09-26 17:23:44 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -18,7 +18,7 @@ param(
 
 $libname = 'lua'
 $source = "${libname}-${version}.tar.gz"
-$source_dir = "${libname}-${version}"
+$build_name = "${libname}-${version}"
 $repo_root = "https://www.lua.org/ftp/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
@@ -36,7 +36,7 @@ Validate-Archive
 Extract-Archive
 
 # patch, configure, build, archive
-Push-Location "${source_dir}"
+Push-Location "${build_src_dir}"
 
   # activate toolchain
   Activate-Toolchain

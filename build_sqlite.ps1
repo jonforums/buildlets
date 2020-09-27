@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-08-15 00:42:40 -0600
+# Revision: 2020-09-26 17:47:14 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -24,7 +24,7 @@ $sqlite_dirs = @{'3.33.0' = '2020'}
 
 $libname = 'sqlite'
 $source = "${libname}-amalgamation-${sqlite_version}.zip"
-$source_dir = "${libname}-amalgamation-${sqlite_version}"
+$build_name = "${libname}-amalgamation-${sqlite_version}"
 $repo_root = "https://www.sqlite.org/$($sqlite_dirs[$version])/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
@@ -40,37 +40,42 @@ Validate-Archive
 
 # extract
 Extract-CustomArchive {
-  & "$s7z" "x" $source | Out-Null
+  & "$s7z" "x" $source -o"${build_root}" | Out-Null
 }
 
 # patch, configure, build, archive
-Push-Location "${source_dir}"
+Push-Location "${build_src_dir}"
 
   # activate toolchain
   Activate-Toolchain
 
   # configure tools
   Configure-Build {
-    $defines = @('-D_WIN32_WINNT=0x0501'
+    $defines = @('-D_WIN32_WINNT=0x0A00'
+                 '-DWINVER=0x0A00'
                  '-DNDEBUG'
                  '-D_WINDOWS'
                  '-DNO_TCL'
                  '-DSQLITE_OMIT_DEPRECATED'
                  '-DSQLITE_ENABLE_JSON1'
                  '-DSQLITE_WIN32_MALLOC'
+                 '-D__USE_MINGW_ANSI_STDIO'
                  '-DSQLITE_ENABLE_FTS5'
                  '-DSQLITE_SECURE_DELETE'
                  '-DSQLITE_ENABLE_RTREE'
                  '-DSQLITE_ENABLE_GEOPOLY'
+                 '-DSQLITE_DQS=0'
                  '-DSQLITE_THREADSAFE=0'
                  '-DSQLITE_MAX_EXPR_DEPTH=0'
                  '-DSQLITE_DEFAULT_MEMSTATUS=0'
                  '-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1'
                  '-DSQLITE_LIKE_DOESNT_MATCH_BLOBS'
+                 '-DSQLITE_OMIT_PROGRESS_CALLBACK'
+                 '-DSQLITE_ENABLE_BATCH_ATOMIC_WRITE'
                  '-DSQLITE_ENABLE_EXPLAIN_COMMENTS'
                  '-DSQLITE_ENABLE_COLUMN_METADATA'
                  '-DSQLITE_ENABLE_UNKNOWN_SQL_FUNCTION')
-    $script:cflags = "-g $($defines -join ' ') -Wall -Wextra -O2"
+    $script:cflags = "-g $($defines -join ' ') -Wall -Wextra -O2 -march=native -pipe"
   }
 
   New-Build {

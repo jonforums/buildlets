@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-01-26 22:39:48 -0600
+# Revision: 2020-09-26 17:26:33 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -18,8 +18,8 @@ param(
 
 $libname = 'zlib'
 $source = "${libname}-${version}.tar.gz"
-$source_dir = "${libname}-${version}"
-$repo_root = 'http://zlib.net/'
+$build_name = "${libname}-${version}"
+$repo_root = 'https://zlib.net/'
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.md5"
 
@@ -36,7 +36,7 @@ Validate-Archive
 Extract-Archive
 
 # patch, configure, build, archive
-Push-Location "${source_dir}"
+Push-Location "${build_src_dir}"
 
   # activate toolchain
   Activate-Toolchain
