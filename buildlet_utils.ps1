@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-26 10:12:06 -0600
+# Revision: 2020-09-27 13:48:49 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -290,12 +290,13 @@ function script:Move-ArchiveToPkg() {
   mv "$install_dir/$bin_archive_hash" "$pkg_root" -force
 }
 
-function Archive-Build($name = $build_name) {
+function Archive-Build($name = $build_name, $variant = $null) {
+  if (-not ($variant)) { $variant = 'bin' }
   Push-Location "$install_dir"
     if ($x64) { $arch = '[64-bit]' }
     Write-Status "creating binary archive for ${name} ${arch}"
     if ($x64) { $arch = 'x64' } else { $arch = 'x86' }
-    $script:bin_archive = "${name}-${arch}-windows-bin.7z"
+    $script:bin_archive = "${name}-${arch}-windows-${variant}.7z"
     $script:bin_archive_hash = "$bin_archive.sha256"
 
     & "$s7z" "a" "-mx=9" "-r" $bin_archive "*" | Out-Null
