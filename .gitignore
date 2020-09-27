@@ -5,3 +5,5 @@ pax_global_header
 *.bz2
 *.7z
 *.zip
+*.xz
+*.zst
