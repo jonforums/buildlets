@@ -11,7 +11,7 @@ $script:original_path = $env:PATH
 $env:PATH = 'C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\'
 
 # buildlet execution root directory
-$buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
+$script:buildlet_root = Split-Path -parent $MyInvocation.MyCommand.Path
 
 trap {
   Clean-Build
@@ -20,6 +20,9 @@ trap {
 
 # parse and validate user specified toolchain configuration data
 function private:Validate-Toolchain() {
+  if (-not ($toolchain.buildroot)) {
+    throw '[ERROR] must specify a build root directory'
+  }
   if (-not ($toolchain.x86)) {
     throw '[ERROR] must provide a 32-bit toolchain configuration'
   }
@@ -51,6 +54,7 @@ function private:Validate-Toolchain() {
   }
 }
 
+# ensure a valid toolchain definition file exists
 try {
   if (Test-Path 'toolchain.json') {
     $toolchain = Get-Content 'toolchain.json' | Out-String | ConvertFrom-Json
@@ -66,7 +70,17 @@ catch {
 
 # by default, ensure internal build tools are used
 if (-not "$s7z") {
-  $s7z = "$PWD\tools\7za.exe"
+  $s7z = "$buildlet_root\tools\7za.exe"
+}
+
+# customizable build dir structure, i.e. allows ramdisk based builds
+$script:build_root = $toolchain.buildroot
+$script:build_stage_dir = "${build_root}staging"
+$script:build_src_dir = "${build_root}/${build_name}"
+
+# ensure build root dir exists
+if (-not (Test-Path "${build_root}")) {
+  throw "[ERROR] build root '${build_root}' does not exist"
 }
 
 # TODO implement `.\buildlet.conf` customization capability using
@@ -166,32 +180,26 @@ function Validate-Archive() {
   }
 }
 
+# use for extracting tar based archives
 function Extract-Archive() {
   Write-Status "extracting $source"
   $tar_file = "$($source.Substring(0, $source.LastIndexOf('-')))*.tar"
-  (& "$s7z" "x" "-y" $source) -and (& "$s7z" "x" "-y" $tar_file) -and (rm $tar_file) | Out-Null
+  (& "$s7z" "x" "-y" $source) -and (& "$s7z" "x" "-y" $tar_file -o"${build_root}") -and (rm $tar_file) | Out-Null
 }
 
-function Extract-CustomArchive {
-  param (
-    [System.Management.Automation.ScriptBlock] $block
-  )
-
+# use for extracting zip's, non-tar based archives, and any other custom archive extractions
+function Extract-CustomArchive([System.Management.Automation.ScriptBlock] $block) {
   Write-Status "extracting $source"
 
   if ($block) {
     $block.Invoke()
   } else {
-    (& "$s7z" "x" "-y" $source -o"${source_dir}") | Out-Null
+    (& "$s7z" "x" "-y" $source -o"${build_root}") | Out-Null
   }
 }
 
 # TODO allow custom status message
-function Activate-Toolchain() {
-  param (
-    [System.Management.Automation.ScriptBlock] $block
-  )
-
+function Activate-Toolchain([System.Management.Automation.ScriptBlock] $block) {
   if ($x64) { $arch = '[64-bit]' }
   Write-Status "activating toolchain ${arch}"
   $new_path = $toolchain.x86.path -join ';'
@@ -209,13 +217,9 @@ function Activate-Toolchain() {
 }
 
 # TODO alllow custom status message
-function Apply-Patches() {
-  param (
-    [System.Management.Automation.ScriptBlock] $block
-  )
-
+function Apply-Patches([System.Management.Automation.ScriptBlock] $block) {
   if ($x64) { $arch = '[64-bit]' }
-  Write-Status "patching ${source_dir} ${arch}"
+  Write-Status "patching ${build_name} ${arch}"
 
   if ($block) {
     $block.Invoke()
@@ -229,38 +233,26 @@ function Apply-Patches() {
 }
 
 # TODO allow custom status message
-function Configure-Build() {
-  param (
-    [System.Management.Automation.ScriptBlock] $block
-  )
-
+function Configure-Build([System.Management.Automation.ScriptBlock] $block) {
   if ($x64) { $arch = '[64-bit]' }
-  Write-Status "configuring ${source_dir} ${arch}"
-  $script:install_dir = "$($PWD.ToString().Replace('\','/'))/my_install"
+  Write-Status "configuring ${build_name} ${arch}"
+  $script:install_dir = "$(${build_stage_dir}.ToString().Replace('\','/'))"
 
   if ($block) { $block.Invoke() }
 }
 
 # TODO allow custom status message
-function New-Build() {
-  param (
-    [System.Management.Automation.ScriptBlock] $block
-  )
-
+function New-Build([System.Management.Automation.ScriptBlock] $block) {
   if ($x64) { $arch = '[64-bit]' }
-  Write-Status "building ${source_dir} ${arch}"
+  Write-Status "building ${build_name} ${arch}"
 
   if ($block) { $block.Invoke() }
 }
 
 # TODO allow custom status message
-function Stage-Build() {
-  param (
-    [System.Management.Automation.ScriptBlock] $block
-  )
-
+function Stage-Build([System.Management.Automation.ScriptBlock] $block) {
   if ($x64) { $arch = '[64-bit]' }
-  Write-Status "staging ${source_dir} ${arch}"
+  Write-Status "staging ${build_name} ${arch}"
 
   if ($block) { $block.Invoke() }
 }
@@ -281,13 +273,9 @@ function script:New-FileHash($path) {
 }
 
 # TODO allow custom status message
-function Test-Build() {
-  param (
-    [System.Management.Automation.ScriptBlock] $block
-  )
-
+function Test-Build([System.Management.Automation.ScriptBlock] $block) {
   if ($x64) { $arch = '[64-bit]' }
-  Write-Status "testing ${source_dir} ${arch}"
+  Write-Status "testing ${build_name} ${arch}"
 
   if ($block) { $block.Invoke() }
 }
@@ -302,11 +290,7 @@ function script:Move-ArchiveToPkg() {
   mv "$install_dir/$bin_archive_hash" "$pkg_root" -force
 }
 
-function Archive-Build() {
-  param (
-    $name = $source_dir
-  )
-
+function Archive-Build($name = $build_name) {
   Push-Location "$install_dir"
     if ($x64) { $arch = '[64-bit]' }
     Write-Status "creating binary archive for ${name} ${arch}"
@@ -324,29 +308,26 @@ function Archive-Build() {
   Pop-Location
 }
 
-function Clean-Build() {
-  param (
-    [System.Management.Automation.ScriptBlock] $block
-  )
-
+function Clean-Build([System.Management.Automation.ScriptBlock] $block) {
   Write-Status "cleaning up"
   if ($block) {
     $block.Invoke()
   } else {
-    rm "${source_dir}" -recurse -force
+    rm ${build_src_dir}, ${build_stage_dir} -recurse -force
   }
 
   $env:CPATH = $null
   $env:CC = $null
   $env:CXX = $null
   $env:CFLAGS = $null
+  $env:CPPFLAGS = $null
+  $env:LDFLAGS = $null
   $env:LIBRARY_PATH = $null
   $env:PATH = $original_path
 }
 
 # Returns whether or not the current user has administrative privileges
-function IsAdministrator
-{
+function IsAdministrator {
     $Identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
     $Principal = New-Object System.Security.Principal.WindowsPrincipal($Identity)
     $Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
