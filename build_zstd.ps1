@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-26 16:52:35 -0600
+# Revision: 2020-09-27 19:24:20 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -28,7 +28,7 @@ $libname = 'zstd'
 $source = "${libname}-${version}.tar.gz"
 $build_name = "${libname}-${version}"
 $repo_root = "https://github.com/facebook/${libname}/releases/download/v${version}/"
-$archive = "${repo_root}${libname}-${version}.tar.gz"
+$archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
 # source the buildlet library
@@ -55,23 +55,23 @@ Push-Location "${build_src_dir}"
     $env:LDFLAGS = "-L $LZMA_DIR/lib -L $ZLIB_DIR/lib -l:liblzma.a -l:libz.a"
   }
 
+  # configure
+  Configure-Build
+
   # build
   New-Build {
     sh -c "make zstd HAVE_THREAD=1 ZSTD_LEGACY_SUPPORT=0 HAVE_ZLIB=1 HAVE_LZMA=1" | Out-Null
   }
 
-  # configure
-  Configure-Build
-
   # stage
   Stage-Build {
-    New-Item "$install_dir/bin" -itemtype directory | Out-Null
-    mv "${libname}.exe" "$install_dir/bin" | Out-Null
-    strip --strip-unneeded "$install_dir/bin/${libname}.exe" | Out-Null
+    New-Item "$install_dir" -itemtype directory | Out-Null
+    mv "${libname}.exe" "$install_dir" | Out-Null
+    strip --strip-unneeded "$install_dir/${libname}.exe" | Out-Null
   }
 
   # archive
-  Archive-Build
+  Archive-Build -variant 'static-cli'
 
 Pop-Location
 
