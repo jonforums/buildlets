@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2016-11-10 12:01:54 -0600
+# Revision: 2020-09-27 17:02:42 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='libyaml version to build (eg - 0.1.7)')]
-  [validateset('0.1.7')]
+             HelpMessage='libyaml version to build (eg - 0.2.5)')]
+  [validateset('0.2.5')]
   [alias('v')]
   [string] $version,
 
@@ -17,10 +17,10 @@ param(
 )
 
 $libname = 'libyaml'
-$source = "${libname}-${version}.tar.gz"
-$source_dir = "${libname}-${version}"
-$repo_root = "https://github.com/yaml/${libname}/archive/"
-$archive = "${repo_root}${version}.tar.gz"
+$source = "yaml-${version}.tar.gz"
+$build_name = "yaml-${version}"
+$repo_root = "https://github.com/yaml/${libname}/releases/download/${version}/"
+$archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
 # source the buildlet library
@@ -36,7 +36,7 @@ Validate-Archive
 Extract-Archive
 
 # patch, configure, build, archive
-Push-Location "${source_dir}"
+Push-Location "${build_src_dir}"
 
   # activate toolchain
   Activate-Toolchain {
