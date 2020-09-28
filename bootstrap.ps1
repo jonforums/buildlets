@@ -2,14 +2,14 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-01-01 20:58:36 -0600
+# Revision: 2020-09-27 16:59:04 -0600
 
 param (
     [parameter(Mandatory=$false,
                Position=0,
                HelpMessage='Buildlet to download')]
     [alias('b')]
-    [string] $buildlet = $nil
+    [string] $buildlet = $null
 )
 
 $tools = @('7za.exe')
@@ -35,6 +35,7 @@ $buildlets = @('build_bzip2'
                'build_tcltk'
                'build_unqlite'
                'build_zlib'
+               'build_zstd'
               )
 $buildlet_uri = 'https://raw.github.com/jonforums/buildlets/master/'
 
