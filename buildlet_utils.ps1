@@ -225,9 +225,8 @@ function Apply-Patches([System.Management.Automation.ScriptBlock] $block) {
     $block.Invoke()
   } else {
     Get-ChildItem "${buildlet_root}/patches/${libname}" | Sort-Object | %{
-      $patch = "${buildlet_root}/patches/${libname}/$_"
-      Write-Status "   applying $_"
-      patch -p1 -i "${patch}" | Out-Null
+      Write-Status "   applying $($_.BaseName)"
+      patch -p1 -i "$_" | Out-Null
     }
   }
 }
