@@ -70,13 +70,13 @@ Push-Location "${build_src_dir}"
 
   # stage
   Stage-Build {
-    New-Item "$install_dir/bin" -itemtype directory | Out-Null
-    mv "${libname}.exe" "$install_dir/bin" | Out-Null
-    strip --strip-unneeded "$install_dir/bin/${libname}.exe" | Out-Null
+    New-Item "$install_dir" -itemtype directory | Out-Null
+    mv "${libname}.exe" "$install_dir" | Out-Null
+    strip --strip-unneeded "$install_dir/${libname}.exe" | Out-Null
   }
 
   # archive
-  Archive-Build
+  Archive-Build -variant 'static-cli'
 
 Pop-Location
 
