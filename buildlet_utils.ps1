@@ -18,6 +18,30 @@ trap {
   break
 }
 
+function Write-Status($msg, $leader='--->', $color='Yellow') {
+  Write-Host "$leader $msg" -foregroundcolor $color
+}
+
+function Clean-Build([System.Management.Automation.ScriptBlock] $block) {
+  Write-Status "cleaning up"
+  if ($block) {
+    $block.Invoke()
+  } else {
+    "$build_src_dir", "$build_stage_dir" | % {
+      if (Test-Path "$_") { rm $_ -recurse -force }
+    }
+  }
+
+  $env:CPATH = $null
+  $env:CC = $null
+  $env:CXX = $null
+  $env:CFLAGS = $null
+  $env:CPPFLAGS = $null
+  $env:LDFLAGS = $null
+  $env:LIBRARY_PATH = $null
+  $env:PATH = $original_path
+}
+
 # parse and validate user specified toolchain configuration data
 function private:Validate-Toolchain() {
   if (-not ($toolchain.buildroot)) {
@@ -85,10 +109,6 @@ if (-not (Test-Path "${build_root}")) {
 
 # TODO implement `.\buildlet.conf` customization capability using
 # `ConvertFrom-StringData` converts `name = value` pairs into hash tables
-
-function Write-Status($msg, $leader='--->', $color='Yellow') {
-  Write-Host "$leader $msg" -foregroundcolor $color
-}
 
 function Fetch-Archive() {
   if (-not (Test-Path $source)) {
@@ -216,7 +236,7 @@ function Activate-Toolchain([System.Management.Automation.ScriptBlock] $block) {
   if ($block) { $block.Invoke() }
 }
 
-# TODO alllow custom status message
+# TODO allow custom status message
 function Apply-Patches([System.Management.Automation.ScriptBlock] $block) {
   if ($x64) { $arch = '[64-bit]' }
   Write-Status "patching ${build_name} ${arch}"
@@ -224,7 +244,7 @@ function Apply-Patches([System.Management.Automation.ScriptBlock] $block) {
   if ($block) {
     $block.Invoke()
   } else {
-    Get-ChildItem "${buildlet_root}/patches/${libname}" | Sort-Object | %{
+    Get-ChildItem "${buildlet_root}/patches/${libname}" | Sort-Object | % {
       Write-Status "   applying $($_.BaseName)"
       patch -p1 -i "$_" | Out-Null
     }
@@ -306,24 +326,6 @@ function Archive-Build($name = $build_name, $variant = $null) {
     Move-ArchiveToPkg
 
   Pop-Location
-}
-
-function Clean-Build([System.Management.Automation.ScriptBlock] $block) {
-  Write-Status "cleaning up"
-  if ($block) {
-    $block.Invoke()
-  } else {
-    rm ${build_src_dir}, ${build_stage_dir} -recurse -force
-  }
-
-  $env:CPATH = $null
-  $env:CC = $null
-  $env:CXX = $null
-  $env:CFLAGS = $null
-  $env:CPPFLAGS = $null
-  $env:LDFLAGS = $null
-  $env:LIBRARY_PATH = $null
-  $env:PATH = $original_path
 }
 
 # Returns whether or not the current user has administrative privileges
