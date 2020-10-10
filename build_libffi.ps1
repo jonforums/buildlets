@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2017-01-01 23:12:53 -0600
+# Revision: 2020-10-10 16:09:59 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='libffi version to build (eg - 3.2.1)')]
-  [validateset('3.2.1')]
+             HelpMessage='libffi version to build (eg - 3.3)')]
+  [validateset('3.3')]
   [alias('v')]
   [string] $version,
 
@@ -18,7 +18,7 @@ param(
 
 $libname = 'libffi'
 $source = "${libname}-${version}.tar.gz"
-$source_dir = "${libname}-${version}"
+$build_name = "${libname}-${version}"
 $repo_root = "ftp://sourceware.org/pub/${libname}/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.md5"
@@ -36,7 +36,7 @@ Validate-Archive
 Extract-Archive
 
 # patch, configure, build, archive
-Push-Location "${source_dir}"
+Push-Location "${build_src_dir}"
 
   # activate toolchain
   Activate-Toolchain
@@ -53,12 +53,6 @@ Push-Location "${source_dir}"
 
   # install
   sh -c "make install" | Out-Null
-
-  # post-install patch
-  Push-Location "$install_dir"
-    mv $(Resolve-Path lib\libffi-*\include) $PWD
-    rm $(Resolve-Path lib\libffi-*)
-  Pop-Location
 
   # archive
   Archive-Build
