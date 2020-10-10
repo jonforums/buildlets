@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-10-10 09:10:49 -0600
+# Revision: 2020-10-10 14:38:41 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -13,11 +13,7 @@ param(
   [string] $version,
 
   [parameter(HelpMessage='perform a 64-bit build')]
-  [switch] $x64,
-
-  [parameter(HelpMessage='path to zlib dev libraries root directory')]
-  [alias('with-zlib-dir')]
-  [string] $ZLIB_DIR = 'C:/devlibs/zlib/x86/1.2.11'
+  [switch] $x64
 )
 
 $libname = 'pcre2'
@@ -43,12 +39,7 @@ Extract-Archive
 Push-Location "${build_src_dir}"
 
   # activate toolchain
-  Activate-Toolchain {
-    $ZLIB_DIR = $ZLIB_DIR.Replace('\', '/')
-    
-    $env:CFLAGS = "-I$ZLIB_DIR/include"
-    $env:LDFLAGS = "-L$ZLIB_DIR/lib -l:libz.a"
-  }
+  Activate-Toolchain
 
   # configure
   Configure-Build {
