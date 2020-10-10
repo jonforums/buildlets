@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-27 13:48:49 -0600
+# Revision: 2020-10-10 10:26:27 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -269,6 +269,9 @@ function New-Build([System.Management.Automation.ScriptBlock] $block) {
 }
 
 # TODO allow custom status message
+# Manually create ${install_dir} in this block if not already done via the
+# `make install` corresponding to a `configure --prefix="..."` step. Otherwise
+# the Archive-Build step will fail due to a missing ${install_dir} dir.
 function Stage-Build([System.Management.Automation.ScriptBlock] $block) {
   if ($x64) { $arch = '[64-bit]' }
   Write-Status "staging ${build_name} ${arch}"
