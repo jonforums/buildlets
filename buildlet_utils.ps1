@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-10-10 10:26:27 -0600
+# Revision: 2020-10-10 16:50:33 -0600
 
 # save the clean path
 $script:original_path = $env:PATH
@@ -27,6 +27,7 @@ function Clean-Build([System.Management.Automation.ScriptBlock] $block) {
   if ($block) {
     $block.Invoke()
   } else {
+    if (Test-Path "${build_root}/${source}") { rm "${build_root}/${source}" -force }
     "$build_src_dir", "$build_stage_dir" | % {
       if (Test-Path "$_") { rm $_ -recurse -force }
     }
