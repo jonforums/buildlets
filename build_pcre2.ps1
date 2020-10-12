@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-10-10 14:38:41 -0600
+# Revision: 2020-10-12 15:54:35 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -46,7 +46,7 @@ Push-Location "${build_src_dir}"
     $private:opts = @('--enable-never-backslash-C'
                       '--enable-jit'
                       '--enable-newline-is-anycrlf')
-    sh -c "./configure --prefix=${install_dir} $($opts -join ' ')" | Out-Null
+    sh -c "./configure --prefix=${install_dir} ${triplets} $($opts -join ' ')" | Out-Null
   }
 
   # build
