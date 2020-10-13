@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-10-11 11:57:08 -0600
+# Revision: 2020-10-12 20:53:01 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -44,10 +44,10 @@ Push-Location "${build_src_dir}"
   # configure
   Configure-Build {
     # TODO find better configure.ac and src/Makefile.am fix and submit upstream.
-    #      The fix needs to create libonig*.dll and libonig.def, install both to
-    #      $bindir, strip the DLL, and create lib/{libonig.a,libonig.dll.a}
+    #      The fix needs to create libonig*.dll and libonig.def, install to $bindir
+    #      and $libdir, strip the DLL, and create lib/{libonig.a,libonig.dll.a}
     #      Need to override with `--build=x86_64-w64-mingw32` as config.guess used
-    #      `x86_64-w64-msys` which disabled shared lib builds
+    #      `x86_64-pc-msys` which disabled shared lib builds
     # https://lists.gnu.org/archive/html/libtool/2007-04/msg00066.html
     sed -i '/^libonig_la_LDFLAGS/s/^.*$/& -no-undefined/' src/Makefile.am
     sh -c 'autoreconf -fi' | Out-Null
@@ -65,10 +65,8 @@ Push-Location "${build_src_dir}"
 
   # stage
   Stage-Build {
-    #cp "${build_src_dir}/src/lib${libname}.dll" "${install_dir}/bin" | Out-Null
-
     strip "${install_dir}/bin/lib${libname}*.dll" | Out-Null
-    cp "${build_src_dir}/src/lib${libname}.def" "${install_dir}/bin" | Out-Null
+    cp "${build_src_dir}/src/lib${libname}.def" "${install_dir}/lib" | Out-Null
   }
 
   # archive
