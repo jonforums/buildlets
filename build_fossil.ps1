@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-26 18:20:59 -0600
+# Revision: 2020-11-07 20:20:20 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='fossil version to build (eg - 2.12.1)')]
-  [validateset('2.12.1')]
+             HelpMessage='fossil version to build (eg - 2.13)')]
+  [validateset('2.13')]
   [alias('v')]
   [string] $version,
 
