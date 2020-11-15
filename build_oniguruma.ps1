@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-10-21 11:38:56 -0600
+# Revision: 2020-11-15 09:30:05 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='Oniguruma version to build (eg - 6.9.6-rc4)')]
-  [validateset('6.9.6-rc4')]
+             HelpMessage='Oniguruma version to build (eg - 6.9.6)')]
+  [validateset('6.9.6')]
   [alias('v')]
   [string] $version,
 
