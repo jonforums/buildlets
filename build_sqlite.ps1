@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-26 17:47:14 -0600
+# Revision: 2020-12-04 20:09:36 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='sqlite version to build (eg - 3.33.0).')]
-  [validateset('3.33.0')]
+             HelpMessage='sqlite version to build (eg - 3.34.0).')]
+  [validateset('3.34.0')]
   [alias('v')]
   [string] $version,
 
@@ -20,7 +20,7 @@ param(
 [int[]] $v = $version.Split('.')
 $sqlite_version = $v[0]*1000000 + $v[1]*10000 + $v[2]*100
 if ($v.Length -eq 4) { $sqlite_version += $v[3] }
-$sqlite_dirs = @{'3.33.0' = '2020'}
+$sqlite_dirs = @{'3.34.0' = '2020'}
 
 $libname = 'sqlite'
 $source = "${libname}-amalgamation-${sqlite_version}.zip"
