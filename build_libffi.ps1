@@ -2,7 +2,7 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-10-10 16:09:59 -0600
+# Revision: 2020-12-06 21:34:29 -0600
 
 param(
   [parameter(Mandatory=$true,
@@ -19,9 +19,9 @@ param(
 $libname = 'libffi'
 $source = "${libname}-${version}.tar.gz"
 $build_name = "${libname}-${version}"
-$repo_root = "ftp://sourceware.org/pub/${libname}/"
+$repo_root = "https://github.com/libffi/libffi/releases/download/v${version}/"
 $archive = "${repo_root}${source}"
-$hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.md5"
+$hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
 
 # source the buildlet library
 . "$PWD\buildlet_utils.ps1"
