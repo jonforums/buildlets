@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-10-12 15:54:35 -0600
+# Revision: 2020-12-11 19:00:58 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='PCRE2 version to build (eg - 10.35)')]
-  [validateset('10.35')]
+             HelpMessage='PCRE2 version to build (eg - 10.36)')]
+  [validateset('10.36')]
   [alias('v')]
   [string] $version,
 
