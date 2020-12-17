@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-27 19:24:20 -0600
+# Revision: 2020-12-17 09:54:51 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='Zstd version to build (eg - 1.4.5)')]
-  [validateset('1.4.5')]
+             HelpMessage='Zstd version to build (eg - 1.4.7)')]
+  [validateset('1.4.7')]
   [alias('v')]
   [string] $version,
 
