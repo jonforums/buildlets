@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-11-15 09:30:05 -0600
+# Revision: 2021-05-26 17:10:13 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='Oniguruma version to build (eg - 6.9.6)')]
-  [validateset('6.9.6')]
+             HelpMessage='Oniguruma version to build (eg - 6.9.7.1)')]
+  [validateset('6.9.7.1')]
   [alias('v')]
   [string] $version,
 
@@ -18,7 +18,14 @@ param(
 
 $libname = 'onig'
 $source = "${libname}-${version}.tar.gz"
-$build_name = "${libname}-$($version.Split([char[]]'-_')[0])"
+
+# fix archive version naming inconsistencies
+$ver = $version.Split([char[]]'-_')[0]
+if ($ver.Split('.').Length -gt 3) {
+  $ver = $ver.Split('.')[0..2] -join '.'
+}
+$build_name = "${libname}-${ver}"
+
 $repo_root = "https://github.com/kkos/oniguruma/releases/download/v$($version.Replace('-','_'))/"
 $archive = "${repo_root}${source}"
 $hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha1"
@@ -55,7 +62,7 @@ Push-Location "${build_src_dir}"
   sh -c 'make install-strip' | Out-Null
 
   # archive
-  Archive-Build
+  Archive-Build "${libname}-${version}"
 
 Pop-Location
 
