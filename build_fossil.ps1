@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-11-07 20:20:20 -0600
+# Revision: 2021-05-31 00:45:39 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='fossil version to build (eg - 2.13)')]
-  [validateset('2.13')]
+             HelpMessage='fossil version to build (eg - 2.15.1)')]
+  [validateset('2.15.1')]
   [alias('v')]
   [string] $version,
 
@@ -17,7 +17,7 @@ param(
 
   [parameter(HelpMessage='path to OpenSSL dev library root directory')]
   [alias('with-ssl-dir')]
-  [string] $SSL_DIR = 'C:/devlibs/openssl/x86/1.1.1h'
+  [string] $SSL_DIR = 'C:/devlibs/openssl/x86/1.1.1k'
 )
 
 $libname = 'fossil'
