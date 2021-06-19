@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2021-05-28 08:36:57 -0600
+# Revision: 2021-06-19 17:01:12 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='sqlite version to build (eg - 3.35.5).')]
-  [validateset('3.35.5')]
+             HelpMessage='sqlite version to build (eg - 3.36.0).')]
+  [validateset('3.36.0')]
   [alias('v')]
   [string] $version,
 
@@ -20,7 +20,7 @@ param(
 [int[]] $v = $version.Split('.')
 $sqlite_version = $v[0]*1000000 + $v[1]*10000 + $v[2]*100
 if ($v.Length -eq 4) { $sqlite_version += $v[3] }
-$sqlite_dirs = @{'3.35.5' = '2021'}
+$sqlite_dirs = @{'3.36.0' = '2021'}
 
 $libname = 'sqlite'
 $source = "${libname}-amalgamation-${sqlite_version}.zip"
@@ -56,10 +56,12 @@ Push-Location "${build_src_dir}"
                  '-DNDEBUG'
                  '-D_WINDOWS'
                  '-DNO_TCL'
+                 '-DSQLITE_ENABLE_MATH_FUNCTIONS'
                  '-DSQLITE_OMIT_DEPRECATED'
                  '-DSQLITE_ENABLE_JSON1'
                  '-DSQLITE_WIN32_MALLOC'
                  '-D__USE_MINGW_ANSI_STDIO'
+                 '-DSQLITE_ENABLE_FTS4'
                  '-DSQLITE_ENABLE_FTS5'
                  '-DSQLITE_SECURE_DELETE'
                  '-DSQLITE_ENABLE_RTREE'
@@ -71,6 +73,8 @@ Push-Location "${build_src_dir}"
                  '-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1'
                  '-DSQLITE_LIKE_DOESNT_MATCH_BLOBS'
                  '-DSQLITE_OMIT_PROGRESS_CALLBACK'
+                 '-DSQLITE_OMIT_SHARED_CACHE'
+                 '-DSQLITE_ENABLE_DBSTAT_VTAB'
                  '-DSQLITE_ENABLE_BATCH_ATOMIC_WRITE'
                  '-DSQLITE_ENABLE_EXPLAIN_COMMENTS'
                  '-DSQLITE_ENABLE_COLUMN_METADATA'
