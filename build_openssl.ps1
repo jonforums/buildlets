@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2021-03-27 12:55:40 -0600
+# Revision: 2021-08-24 15:25:14 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='OpenSSL version to build (eg - 1.1.1k).')]
-  [validateset('1.1.1k')]
+             HelpMessage='OpenSSL version to build (eg - 1.1.1l).')]
+  [validateset('1.1.1l')]
   [alias('v')]
   [string] $version,
 
