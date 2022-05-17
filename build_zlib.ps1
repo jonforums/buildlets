@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2020-09-26 17:26:33 -0600
+# Revision: 2022-05-16 23:25:13 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='zlib version to build (eg - 1.2.11)')]
-  [validateset('1.2.11')]
+             HelpMessage='zlib version to build (eg - 1.2.12)')]
+  [validateset('1.2.12')]
   [alias('v')]
   [string] $version,
 
@@ -21,7 +21,7 @@ $source = "${libname}-${version}.tar.gz"
 $build_name = "${libname}-${version}"
 $repo_root = 'https://zlib.net/'
 $archive = "${repo_root}${source}"
-$hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.md5"
+$hash_uri = "https://raw.github.com/jonforums/buildlets/master/hashery/${libname}.sha256"
 
 # source the buildlet library
 . "$PWD\buildlet_utils.ps1"
