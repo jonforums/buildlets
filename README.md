@@ -89,7 +89,7 @@ usage can be as simple as the following:
         ---> downloading tool: 7za.exe
         ---> downloading build_lua.ps1
 
-5. Execute the buildlet
+5. Execute the buildlet after ensuring a `R:/` build root dir exists
 
         PS foo> .\build_lua.ps1 5.2.1
         ---> fetching buildlet library

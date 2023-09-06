@@ -2,13 +2,13 @@
 
 # Author: Jon Maken
 # License: 3-clause BSD
-# Revision: 2022-05-16 23:25:13 -0600
+# Revision: 2023-09-06 10:36:06 -0600
 
 param(
   [parameter(Mandatory=$true,
              Position=0,
-             HelpMessage='zlib version to build (eg - 1.2.12)')]
-  [validateset('1.2.12')]
+             HelpMessage='zlib version to build (eg - 1.3)')]
+  [validateset('1.3')]
   [alias('v')]
   [string] $version,
 
